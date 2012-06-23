@@ -1,4 +1,5 @@
 from django.shortcuts       import render_to_response
+from django.template 		import RequestContext
 from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from videos.models			import Video
 from videos.forms 			import VideoForm
@@ -20,6 +21,7 @@ Workflow:
 	Redirect the user to the video upload success page
 """
 def video_upload(request):
+	csrfContext = RequestContext(request)
 	if request.method == 'POST': # if upload form submitted
 		upload_form = VideoForm(request.POST, request.FILES) # bind form data for vif form.is_valid():alidation
 		if upload_form.is_valid(): # validate
@@ -30,7 +32,7 @@ def video_upload(request):
 			return HttpResponseRedirect('/video/upload/success/') # redirect user
 	else:
 		upload_form = VideoForm()
-	return render_to_response('videos/video_upload.html', {'upload_form': upload_form})
+	return render_to_response('videos/video_upload.html', {'upload_form': upload_form}, csrfContext)
 
 """
 Video results pages

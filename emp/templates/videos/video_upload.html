@@ -5,7 +5,8 @@
 <body>
 
 
-<form enctype="multipart/form-data" method="post" action="">
+<form enctype="multipart/form-data" method="post" action="/video/upload/">
+{% csrf_token %}
 {{ upload_form.as_p }}
 <input type="submit" value="Upload" />
 </form>
