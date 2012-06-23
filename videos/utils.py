@@ -27,6 +27,7 @@ def process_uploaded_video(uploaded_video):
 
 	# CONVERT VIDEO, pass in Video object for further processing
 	convert_uploaded_video(filename, uploaded_video)
+
 """
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
@@ -36,6 +37,9 @@ Also, update additional Video object model down here
 TODO: 
 	Implement FFMPEG/mencoder, flvtool2, and perhaps Celery for process handling
 	Exiftool: extracts metadata from audio/video/image files, gets codec info
+	Source file is deleted by default as of now: allow settings to require otherwise,
+		which will prove useful when the HTML5 functionality is added and multiple
+		output formats will be used
 """
 def convert_uploaded_video(filename, uploaded_video):
 	video_id	  = uploaded_video.id
@@ -52,9 +56,11 @@ def convert_uploaded_video(filename, uploaded_video):
 	# Delete sauce file
 	os.system("rm " + src_path)
 
-	# Commit data to Video object model in db
+	# Commit data to Video object model in db #
 	uploaded_video.converted_file = dest_path
+	# Add functionality to allow for admins to re-upload source files and re-convert
 	uploaded_video.source_file    = ""
+	uploaded_video.converted  	  = True
 	uploaded_video.save()
 
 	# uploaded_video.filename_slug  = filename_slug

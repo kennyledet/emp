@@ -8,8 +8,8 @@ from videos.utils 			import *
 """
 Video play page(s)
 """
-def video(request, vid):
-	vid = vid
+def video(request, video_id):
+	video_id = video_id
 	return render_to_response('videos/video.html', locals())
 
 """
