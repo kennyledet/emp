@@ -37,14 +37,21 @@ TODO:
 	Implement FFMPEG/mencoder, flvtool2, and perhaps Celery for process handling
 	Exiftool: extracts metadata from audio/video/image files, gets codec info
 """
-def convert_uploaded_video(filename, ):
+def convert_uploaded_video(filename, uploaded_video):
 	filename_slug = filename.split('.')[0]
 	filepath    = MEDIA_ROOT + '/videos/src/' + filename
 	destpath	= MEDIA_ROOT + '/videos/flv/' + filename_slug + '.flv'
+
 	# convert file to .flv using ffmpeg
 	# store in media/videos/
 	ffmpeg_call = "ffmpeg -i "+ filepath +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + destpath
 	os.system(ffmpeg_call)
+
+	uploaded_video.converted_file = destpath
+	uploaded_video.filename_slug  = filename_slug
+	uploaded_video.save()
+
+
 
 
 

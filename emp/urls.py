@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^videos/$', 		'videos.views.videos', name='videos'),
     url(r'^videos/search/$', 'videos.views.videos_search', name='videos_search'),
     url(r'^video/upload/$', 'videos.views.video_upload', name='video_upload'),
+    url(r'^video/upload/success/$', 'videos.views.video_upload_success', name='video_upload_success'),
     #url(r'^videos/categories/$', 'videos.views.categories' name='categories'),
     
     # url(r'^$', 'emp.views.home', name='home'),

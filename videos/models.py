@@ -29,7 +29,8 @@ class Video(models.Model):
 	# tags 		= models.ManyToManyField(Tag)
 
 	source_file = models.FileField(upload_to="videos/src/")
-	converted_file = models.FileField(upload_to="videos/", blank=True, null=True)
+	converted_file = models.CharField(max_length=255, blank=True, null=True)
+	filename_slug  = models.CharField(max_length=255, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.title
