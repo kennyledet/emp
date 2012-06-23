@@ -1,4 +1,5 @@
 import os
+from   emp.settings import MEDIA_ROOT
 """
 Utility functions to process and complete initial uploaded Video Model here
 
@@ -33,8 +34,8 @@ TODO:
 """
 def convert_uploaded_video(filename):
 	filename_slug = filename.split('.')[0]
-	filepath    = MEDIA_ROOT + 'videos/src/' + filename
-	destpath	= MEDIA_ROOT + 'videos/' + filename_slug + '.flv'
+	filepath    = MEDIA_ROOT + '/videos/src/' + filename
+	destpath	= MEDIA_ROOT + '/videos/' + filename_slug + '.flv'
 	ffmpeg_call = "ffmpeg -i "+ filepath +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + destpath
 	os.system(ffmpeg_call)
 
