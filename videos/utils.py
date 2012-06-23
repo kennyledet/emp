@@ -1,5 +1,8 @@
 import os
+# import MEDIA_ROOT folder to store videos in
 from   emp.settings import MEDIA_ROOT
+# import Video model
+from   videos.models import Video
 """
 Utility functions to process and complete initial uploaded Video Model here
 
@@ -22,20 +25,26 @@ def process_uploaded_video(uploaded_video):
 	# Commit Video object to DB
 	uploaded_video.save()
 
-	# CONVERT VIDEO
-	convert_uploaded_video(filename)
+	# CONVERT VIDEO, pass in Video object for further processing
+	convert_uploaded_video(filename, uploaded_video)
 """
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
+
+Also, update additional Video object model down here
 
 TODO: 
 	Implement FFMPEG/mencoder, flvtool2, and perhaps Celery for process handling
 	Exiftool: extracts metadata from audio/video/image files, gets codec info
 """
-def convert_uploaded_video(filename):
+def convert_uploaded_video(filename, ):
 	filename_slug = filename.split('.')[0]
 	filepath    = MEDIA_ROOT + '/videos/src/' + filename
-	destpath	= MEDIA_ROOT + '/videos/' + filename_slug + '.flv'
+	destpath	= MEDIA_ROOT + '/videos/flv/' + filename_slug + '.flv'
+	# convert file to .flv using ffmpeg
+	# store in media/videos/
 	ffmpeg_call = "ffmpeg -i "+ filepath +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + destpath
 	os.system(ffmpeg_call)
+
+
 
