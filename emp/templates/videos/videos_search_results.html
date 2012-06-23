@@ -1,0 +1,23 @@
+<html>
+<head>
+	<title>Search Results</title>
+</head>
+<body>
+{% if no_query %}
+  <p style="color:red;">Please enter a search query!</p>
+{% else if query_empty %}
+  <p style="color:red;">Empty query!</p>
+{% endif %}
+
+{% for video in videos %}
+  <li>
+  	<h6>{{ video.title }}</h6>
+  	<p>{{ video.upload_date }}</p>
+  	<p>{{ video.uploader }}</p>
+  	<p>{{ video.categories }}</p>
+  	<a href="video/{{ video.id }}">Watch</a>
+  </li>
+{% endfor %}
+
+</body>
+</html>
