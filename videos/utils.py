@@ -38,23 +38,26 @@ TODO:
 	Exiftool: extracts metadata from audio/video/image files, gets codec info
 """
 def convert_uploaded_video(filename, uploaded_video):
-	filename_slug = filename.split('.')[0]
-	filepath    = MEDIA_ROOT + '/videos/src/' + filename
-	destpath	= MEDIA_ROOT + '/videos/flv/' + filename_slug + '.flv'
+	video_id	  = uploaded_video.id
+	# filename_slug = filename.split('.')[0]
+
+	src_path    = MEDIA_ROOT + '/videos/src/' + filename
+	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
 
 	# convert file to .flv using ffmpeg
 	# store in media/videos/
-	ffmpeg_call = "ffmpeg -i "+ filepath +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + destpath
+	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
 	os.system(ffmpeg_call)
 
 	# Delete sauce file
-	os.system("rm " + filepath)
+	os.system("rm " + src_path)
 
 	# Commit data to Video object model in db
-	uploaded_video.converted_file = destpath
-	uploaded_video.filename_slug  = filename_slug
+	uploaded_video.converted_file = dest_path
+	uploaded_video.source_file    = ""
 	uploaded_video.save()
 
+	# uploaded_video.filename_slug  = filename_slug
 
 
 
