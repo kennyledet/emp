@@ -47,6 +47,10 @@ def convert_uploaded_video(filename, uploaded_video):
 	ffmpeg_call = "ffmpeg -i "+ filepath +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + destpath
 	os.system(ffmpeg_call)
 
+	# Delete sauce file
+	os.system("rm " + filepath)
+
+	# Commit data to Video object model in db
 	uploaded_video.converted_file = destpath
 	uploaded_video.filename_slug  = filename_slug
 	uploaded_video.save()
