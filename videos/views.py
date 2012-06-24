@@ -1,6 +1,7 @@
 from django.shortcuts       import render_to_response
 from django.template 		import RequestContext
 from django.http 			import HttpResponse, Http404, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from videos.models			import Video
 from videos.forms 			import VideoForm
 from videos.utils 			import *
@@ -15,6 +16,7 @@ Workflow:
 	Pass video object data to videos/video.html template
 """
 def video(request, video_id, video_title_slug=None):
+	user = request.user
 	video_id = video_id
 	video    = Video.objects.get(id=video_id)
 
@@ -28,6 +30,7 @@ Workflow:
 	  as an uncommitted Model instance to be saved
 	Redirect the user to the video upload success page
 """
+@login_required(login_url='/user/login/')
 def video_upload(request):
 	csrfContext = RequestContext(request)
 	# get user
@@ -46,6 +49,7 @@ def video_upload(request):
 	return render_to_response('videos/video_upload.html', {'upload_form': upload_form}, csrfContext)
 
 def video_upload_success(request):
+	user = request.user
 	return render_to_response('videos/video_upload_success.html')
 
 
@@ -53,9 +57,11 @@ def video_upload_success(request):
 Video results pages
 """
 def videos(request):
+	user = request.user
 	return render_to_response('videos/videos.html', locals())
 
 def videos_search(request):
+	user = request.user
 	query_empty = False
 	no_query    = False
 	if request.GET['query']:

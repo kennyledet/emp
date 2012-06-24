@@ -7,6 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Authentication
     url(r'^user/login/$', 'django.contrib.auth.views.login'),
+    url(r'^user/logout/$', 'django.contrib.auth.views.logout', {'next_page':'/videos/'}),
 
     url(r'^video/(\d.*)/$', 'videos.views.video', name='video'),
     url(r'^videos/$', 		'videos.views.videos', name='videos'),
