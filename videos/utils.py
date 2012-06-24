@@ -20,7 +20,6 @@ def process_uploaded_video(uploaded_video):
 	filesize = uploaded_video.source_file.size
 	## TODO: Fill in methods to commit complete Video Model instance
 	# uploaded_video.uploader 	 =
-	uploaded_video.length 	     = get_video_length(filename)
 	uploaded_video.converted	 = False
 	uploaded_video.rating		 = 0
 	# uploaded_video.vidtype	 =
@@ -66,6 +65,8 @@ def convert_uploaded_video(filename, uploaded_video):
 	# Delete sauce file
 	call = subprocess.call(['rm', str(src_path)])
 
+
+	uploaded_video.length 	     = get_video_length(dest_path)
 	# Commit data to Video object model in db #
 	uploaded_video.converted_file = dest_path
 	# Add functionality to allow for admins to re-upload source files and re-convert
@@ -73,8 +74,7 @@ def convert_uploaded_video(filename, uploaded_video):
 	uploaded_video.converted  	  = True
 	uploaded_video.save()
 
-def get_video_length(filename):
-	src_path    = MEDIA_ROOT + '/videos/src/' + filename
-	proc        = subprocess.Popen("ffmpeg -i "+ src_path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
+def get_video_length(path):
+	proc        = subprocess.Popen("ffmpeg -i "+ path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
 	proc_output = proc.communicate()
 	return proc_output[0]
