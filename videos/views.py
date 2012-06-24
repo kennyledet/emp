@@ -4,12 +4,20 @@ from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from videos.models			import Video
 from videos.forms 			import VideoForm
 from videos.utils 			import *
-
 """
 Video play page(s)
+Workflow:
+	Catch the video id in the URL, as well as the video title slug if it exists in the URL
+	  (video title slug in the URL is not required by default and is allowed for convenience for 
+	  	implementing SEO URLs in the future using these slugs!)
+	Use this video ID to get single video object from the database
+
+	Pass video object data to videos/video.html template
 """
-def video(request, video_id):
+def video(request, video_id, video_title_slug=None):
 	video_id = video_id
+	video    = Video.objects.get(id=video_id)
+
 	return render_to_response('videos/video.html', locals())
 
 """
