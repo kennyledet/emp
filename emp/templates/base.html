@@ -39,7 +39,12 @@
           <a class="brand" href="#">Elemental Media Platform</a>
           <div class="btn-group pull-right">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i>{% block uname %}Username{% endblock %}
+              <i class="icon-user"></i>
+                {% if user %}
+                  {{ user }}
+                {% else %}
+                Guest
+                {% endif %}
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">

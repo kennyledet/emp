@@ -32,11 +32,9 @@ class Video(models.Model):
 	favorites   = models.IntegerField(blank=True, null=True)
 	nsfw		= models.BooleanField()
 	views 		= models.IntegerField()
-	# tags 		= models.ManyToManyField(Tag)
 
-	source_file = models.FileField(upload_to="videos/src/")
+	source_file = models.FileField(upload_to="videos/src/", help_text='(todo: allow admin to re-upload src file to re-convert video for w/e reason')
 	converted_file = models.CharField(max_length=255, blank=True, null=True, editable=False)
-	# filename_slug  = models.CharField(max_length=255, blank=True, null=True)
 
 	def __unicode__(self):
 		return self.title

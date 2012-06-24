@@ -37,6 +37,7 @@ def video_upload(request):
 		if upload_form.is_valid(): # validate
 			# save partially complete Video model from form data
 			uploaded_video = upload_form.save(commit=False)
+			uploaded_video.uploader = user
 			# further process Video to fill in missing data / + upload_form to save m2m (django-taggit)
 			process_uploaded_video(uploaded_video, upload_form)
 			return HttpResponseRedirect('/video/upload/success/') # redirect user
