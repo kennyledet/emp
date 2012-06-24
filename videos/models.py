@@ -2,14 +2,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Category(models.Model):
-	category_title = models.CharField(max_length=100)
+	category_title = models.CharField(max_length=255)
 	nsfw		   = models.BooleanField(blank=True)
 
 	def __unicode__(self):
 		return self.category_title
 
 class Video(models.Model):
-	title 		= models.CharField(max_length=100)
+	title 		= models.CharField(max_length=255)
+	title_slug  = models.CharField(max_length=255)
 	uploader 	= models.ForeignKey(User, blank=True, null=True, editable=False) # set blank,null = True temporarily
 	upload_datetime   = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)

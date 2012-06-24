@@ -5,6 +5,7 @@ from   emp.settings import MEDIA_ROOT
 from   videos.models import Video
 """
 Utility functions to process and complete initial uploaded Video Model here
+TODO: Complete slug functionality, remember to have slug update when the title is updated by the user in the future
 
 Workflow:
 	'title','description','categories','nsfw','source_file' have been filled out via submitted form
@@ -22,6 +23,12 @@ def process_uploaded_video(uploaded_video):
 	# uploaded_video.vidtype	 =
 	uploaded_video.favorites     = 0
 	uploaded_video.views		 = 0
+
+	# Create video title slug for usage in URLs
+	title_slug					 = str(uploaded_video.title).lower()
+	title_slug 					 = title_slug.replace(' ','-')
+	uploaded_video.title_slug    = title_slug
+
 	# Commit Video object to DB
 	uploaded_video.save()
 
