@@ -1,17 +1,12 @@
 import os
 import subprocess
-
-# import MEDIA_ROOT folder to store videos in
 from   emp.settings  import MEDIA_ROOT
-# import Video model
 from   videos.models import Video
 """
 Utility functions to process and complete initial uploaded Video Model here
-TODO: Complete slug functionality, remember to have slug update when the title is updated by the user in the future
-	  Fill in the rest of the necessary Model data using appropriate tools
 
 Workflow:
-	'title','description','categories','nsfw','source_file' have been filled out via submitted form
+	'title','description','categories','tags',nsfw','source_file' have been filled out via submitted form
 	upload_datetime is filled out automatically
 	The source file is attributed to the 'source_file' field and is uploaded to "videos/src/"
 	The source file is passed into convert_uploaded_video() for further processing
@@ -46,14 +41,6 @@ Utility functions to pass uploaded video data into ffmpeg/mencoder to be convert
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
 
 Also, update additional Video object model properties down here
-
-TODO: 
-	Implement FFMPEG/mencoder, flvtool2, and perhaps Celery for process handling
-	Exiftool: extracts metadata from audio/video/image files, gets codec info
-	Source file is deleted by default as of now: allow settings to require otherwise,
-		which will prove useful when the HTML5 functionality is added and multiple
-		output formats will be used
-	Add functionality to allow for admins to re-upload source files and re-convert
 """
 def convert_uploaded_video(filename, uploaded_video):
 	# Get video id to use for filename
