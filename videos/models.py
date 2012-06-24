@@ -1,5 +1,9 @@
 from django.db import models
+# Import User model
 from django.contrib.auth.models import User
+# Import django-taggit manager
+from taggit.managers import TaggableManager
+
 
 class Category(models.Model):
 	category_title = models.CharField(max_length=255)
@@ -23,6 +27,7 @@ class Video(models.Model):
 
 	vidtype		= models.CharField(max_length=10, blank=True, editable=False)
 	categories  = models.ManyToManyField(Category)
+	tags 		= TaggableManager()
 	favoriters	= models.ManyToManyField(User, related_name='+', blank=True, editable=False)
 	favorites   = models.IntegerField(blank=True, null=True)
 	nsfw		= models.BooleanField()
