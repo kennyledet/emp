@@ -60,6 +60,10 @@ def convert_uploaded_video(filename, uploaded_video):
 	uploaded_video.converted  	  = True
 	uploaded_video.save()
 
+"""
+Utility function to return the length of a video from ffmpeg output 
+In this format: 00:00:00.00  h:m:s.ms
+"""
 def get_video_length(path):
 	proc        = subprocess.Popen("ffmpeg -i "+ path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
 	proc_output = proc.communicate()

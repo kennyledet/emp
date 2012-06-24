@@ -1,13 +1,7 @@
-<html>
-<head>
-	<title>{{ video.title }}</title>
-</head>
-<body>
+{% extends "base.html" %}
 
+{% block main_content %}
 <h1>Video Page - Placeholder</h1>
 <h4>{{ video.title }}</h4>
 <p>Video title slug: {{ video.title_slug }}</p>
-
-
-</body>
-</html>
+{% endblock %}
