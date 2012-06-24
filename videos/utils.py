@@ -16,7 +16,7 @@ Workflow:
 	The source file is attributed to the 'source_file' field and is uploaded to "videos/src/"
 	The source file is passed into convert_uploaded_video() for further processing
 """
-def process_uploaded_video(uploaded_video):
+def process_uploaded_video(uploaded_video, upload_form):
 	# Get some basic file info
 	filename = str(uploaded_video.source_file.name)
 	filesize = uploaded_video.source_file.size
@@ -36,7 +36,8 @@ def process_uploaded_video(uploaded_video):
 
 	# Commit Video object to DB
 	uploaded_video.save()
-
+	# Commit M2M fields to Video object in DB (django-taggit)
+	upload_form.save_m2m()
 	# CONVERT VIDEO, pass in Video object for further processing
 	convert_uploaded_video(filename, uploaded_video)
 

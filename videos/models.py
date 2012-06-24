@@ -27,7 +27,7 @@ class Video(models.Model):
 
 	vidtype		= models.CharField(max_length=10, blank=True, editable=False)
 	categories  = models.ManyToManyField(Category)
-	tags 		= TaggableManager()
+	tags 		= TaggableManager(blank=True)
 	favoriters	= models.ManyToManyField(User, related_name='+', blank=True, editable=False)
 	favorites   = models.IntegerField(blank=True, null=True)
 	nsfw		= models.BooleanField()
