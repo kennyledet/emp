@@ -14,7 +14,7 @@ class Video(models.Model):
 	uploader 	= models.ForeignKey(User, blank=True, null=True, editable=False) # set blank,null = True temporarily
 	upload_datetime   = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
-	length  	= models.IntegerField(blank=True, null=True, editable=False)
+	length  	= models.CharField(max_length=255, blank=True, editable=False)
 	description = models.TextField(blank=True, null=True)
 	converted   = models.BooleanField(editable=False)
 

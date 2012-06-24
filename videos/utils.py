@@ -1,4 +1,6 @@
 import os
+import subprocess
+
 # import MEDIA_ROOT folder to store videos in
 from   emp.settings import MEDIA_ROOT
 # import Video model
@@ -6,6 +8,7 @@ from   videos.models import Video
 """
 Utility functions to process and complete initial uploaded Video Model here
 TODO: Complete slug functionality, remember to have slug update when the title is updated by the user in the future
+	  Fill in the rest of the necessary Model data using appropriate tools
 
 Workflow:
 	'title','description','categories','nsfw','source_file' have been filled out via submitted form
@@ -17,7 +20,7 @@ def process_uploaded_video(uploaded_video):
 	filesize = uploaded_video.source_file.size
 	## TODO: Fill in methods to commit complete Video Model instance
 	# uploaded_video.uploader 	 =
-	# uploaded_video.length 	 = 
+	uploaded_video.length 	     = get_video_length(filename)
 	uploaded_video.converted	 = False
 	uploaded_video.rating		 = 0
 	# uploaded_video.vidtype	 =
@@ -50,7 +53,6 @@ TODO:
 """
 def convert_uploaded_video(filename, uploaded_video):
 	video_id	  = uploaded_video.id
-	# filename_slug = filename.split('.')[0]
 
 	src_path    = MEDIA_ROOT + '/videos/src/' + filename
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
@@ -59,9 +61,10 @@ def convert_uploaded_video(filename, uploaded_video):
 	# store in media/videos/
 	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
 	os.system(ffmpeg_call)
+	# proc = subprocess.call(['ffmpeg', ffmpeg_args])
 
 	# Delete sauce file
-	os.system("rm " + src_path)
+	call = subprocess.call(['rm', str(src_path)])
 
 	# Commit data to Video object model in db #
 	uploaded_video.converted_file = dest_path
@@ -70,8 +73,8 @@ def convert_uploaded_video(filename, uploaded_video):
 	uploaded_video.converted  	  = True
 	uploaded_video.save()
 
-	# uploaded_video.filename_slug  = filename_slug
-
-
-
-
+def get_video_length(filename):
+	src_path    = MEDIA_ROOT + '/videos/src/' + filename
+	proc        = subprocess.Popen("ffmpeg -i "+ src_path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
+	proc_output = proc.communicate()
+	return proc_output[0]
