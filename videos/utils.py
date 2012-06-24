@@ -65,7 +65,6 @@ def convert_uploaded_video(filename, uploaded_video):
 	# Delete sauce file
 	call = subprocess.call(['rm', str(src_path)])
 
-
 	uploaded_video.length 	     = get_video_length(dest_path)
 	# Commit data to Video object model in db #
 	uploaded_video.converted_file = dest_path
