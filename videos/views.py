@@ -30,6 +30,8 @@ Workflow:
 """
 def video_upload(request):
 	csrfContext = RequestContext(request)
+	# get user
+	user = request.user
 	if request.method == 'POST': # if upload form submitted
 		upload_form = VideoForm(request.POST, request.FILES) # bind form data for vif form.is_valid():alidation
 		if upload_form.is_valid(): # validate
