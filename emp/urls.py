@@ -5,6 +5,9 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    # Authentication
+    url(r'^user/login/$', 'django.contrib.auth.views.login'),
+
     url(r'^video/(\d.*)/$', 'videos.views.video', name='video'),
     url(r'^videos/$', 		'videos.views.videos', name='videos'),
     url(r'^videos/search/$', 'videos.views.videos_search', name='videos_search'),
