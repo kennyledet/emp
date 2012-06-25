@@ -3,6 +3,10 @@
 
 {% block main_content %}
 
-	<h6>Placeholder</h6>
-	
+	<h6>Videos - Placeholder</h6>
+	{% for video in videos %}
+	  <h5>Video title: {{ video.title }}</h5>
+	  <a href="/video/{{ video.id }}">Play</a>
+	{% endfor %}
+
 {% endblock %}

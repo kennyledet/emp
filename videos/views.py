@@ -71,9 +71,12 @@ def video_upload_success(request):
 
 """
 Video results pages
+TODO:
+	Implement pagination
 """
 def videos(request):
 	user = request.user
+	videos = Video.objects.all().order_by('-upload_datetime')
 	return render_to_response('videos/videos.html', locals())
 
 def videos_search(request):
@@ -85,7 +88,7 @@ def videos_search(request):
 		if not query:
 			query_empty = True
 		else:
-			videos = Video.objects.filter(title__icontains=query).order_by(('-upload_time',))
+			videos = Video.objects.filter(title__icontains=query).order_by(('-upload_datetime',))
 			return render_to_response('videos/videos_search_results.html', locals())
 	else:
 		no_query = True
