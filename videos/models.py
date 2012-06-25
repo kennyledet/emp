@@ -33,7 +33,7 @@ class Video(models.Model):
 	nsfw		= models.BooleanField()
 	views 		= models.IntegerField()
 
-	source_file = models.FileField(upload_to="videos/src/", help_text='(todo: allow admin to re-upload src file to re-convert video for w/e reason')
+	source_file = models.FileField(upload_to="videos/src/")
 	converted_file = models.CharField(max_length=255, blank=True, null=True, editable=False)
 
 	def __unicode__(self):
