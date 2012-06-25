@@ -59,7 +59,7 @@ def video_upload(request):
 			upload_form.save_m2m()
 			# ProcessVideoTask (CELERY) pass in filename and video id
 			ProcessVideoTask.delay(video_id)
-			return HttpResponseRedirect('/video/upload/success/') # redirect user
+			return HttpResponseRedirect('/videos/') # redirect user
 	else:
 		upload_form = VideoForm()
 	return render_to_response('videos/video_upload.html', {'upload_form': upload_form}, csrfContext)

@@ -42,18 +42,22 @@
           <a class="brand" href="#">Elemental Media Platform</a>
           <div class="btn-group pull-right">
             <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-              <i class="icon-user"></i>
-                {% if user %}
+                {% if user.is_authenticated %}
                   {{ user }}
                 {% else %}
-                Guest
+                  Guest
                 {% endif %}
               <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
-              <li><a href="#">Profile</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Sign Out</a></li>
+                {% if user.is_authenticated %}
+                  <li><a href="#">Profile</a></li>
+                  <li class="divider"></li>
+                  <li><a href="/user/logout">Sign Out</a></li>
+                {% else %}
+                  <li><a href="#">Register</a></li>
+                  <li><a href="/user/login">Login</a></li>
+                {% endif %}
             </ul>
           </div>
           <div class="nav-collapse">
