@@ -38,3 +38,9 @@ def get_video_length(path):
 	proc        = subprocess.Popen("ffmpeg -i "+ path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
 	proc_output = proc.communicate()
 	return proc_output[0]
+
+
+"""
+def get_vid_type(path):
+	pass
+"""

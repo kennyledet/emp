@@ -24,7 +24,7 @@ class Video(models.Model):
 
 	rating_choices = ((u'1',u'1'),(u'2',u'2'),(u'3',u'3'),(u'4',u'4'),(u'5',u'5'),(u'0',u'0'))
 	rating		= models.IntegerField(choices=rating_choices)
-
+	## TODO: Get vidtype dynamically in the video processor
 	vidtype		= models.CharField(max_length=10, blank=True, editable=False)
 	categories  = models.ManyToManyField(Category)
 	tags 		= TaggableManager(blank=True)

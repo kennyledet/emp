@@ -9,4 +9,6 @@ class ProcessVideoTask(Task):
 		# CONVERT VIDEO, pass in Video object for further processing
 		convert_uploaded_video(video_id)
 
+	
+
 tasks.register(ProcessVideoTask)
