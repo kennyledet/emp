@@ -1,7 +1,18 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-<h1>Video Page - Placeholder</h1>
-<h4>{{ video.title }}</h4>
-<p>Video title slug: {{ video.title_slug }}</p>
+
+	<h1>Video Page - Placeholder</h1>
+	<h4>{{ video.title }}</h4>
+	<p>Description: {{ video.description }}</p>
+	<p>Uploader: {{ video.uploader }}</p>
+	<!-- PLAYER -->
+	<a href="http://127.0.0.1:8000/media/videos/flv/{{ video.id }}.flv"
+	   style="display:block;width:425px;height:300px;"
+	   id="player">
+	</a>
+	<script language="JavaScript">
+	  flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.11.swf");
+	</script>
+
 {% endblock %}
