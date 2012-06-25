@@ -3,40 +3,6 @@ import subprocess
 from   emp.settings  import MEDIA_ROOT
 from   videos.models import Video
 """
-Utility functions to process and complete initial uploaded Video Model here
-
-Workflow:
-	'title','description','categories','tags',nsfw','source_file' have been filled out via submitted form
-	upload_datetime is filled out automatically
-	The source file is attributed to the 'source_file' field and is uploaded to "videos/src/"
-	The source file is passed into convert_uploaded_video() for further processing
-"""
-def process_uploaded_video(uploaded_video, upload_form):
-	# Get some basic file info
-	filename = str(uploaded_video.source_file.name)
-	filesize = uploaded_video.source_file.size
-
-	# Begin filling out Video model data 
-	uploaded_video.converted	 = False
-	uploaded_video.rating		 = 0
-	uploaded_video.favorites     = 0
-	uploaded_video.views		 = 0
-	# uploaded_video.uploader 	 =
-	# uploaded_video.vidtype	 =
-
-	# Create video title slug for usage in URLs
-	title_slug					 = str(uploaded_video.title).lower()
-	title_slug 					 = title_slug.replace(' ','-')
-	uploaded_video.title_slug    = title_slug
-
-	# Commit Video object to DB
-	uploaded_video.save()
-	# Commit M2M fields to Video object in DB (django-taggit)
-	upload_form.save_m2m()
-	# CONVERT VIDEO, pass in Video object for further processing
-	convert_uploaded_video(filename, uploaded_video)
-
-"""
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
 
