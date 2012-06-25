@@ -26,37 +26,39 @@ def video(request, video_id, video_title_slug=None):
 """
 Handle video uploads here
 Workflow: 
-	Process partial video upload form
-	Pass into video proc. function as validated, partially complete video upload form 
-	  as an uncommitted Model instance to be saved
+	Process video upload form
+	Pass into videos.tasks.ProcessVideoTask Celery task
 	Redirect the user to the video upload success page
 """
 @login_required(login_url='/user/login/')
 def video_upload(request):
 	csrfContext = RequestContext(request)
-	# get user
-	user = request.user
+	# get user/uploader
+	uploader = request.user
 	if request.method == 'POST': # if upload form submitted
-		upload_form = VideoForm(request.POST, request.FILES) # bind form data for vif form.is_valid():alidation
+		# bind submitted data to upload form
+		upload_form = VideoForm(request.POST, request.FILES)
 		if upload_form.is_valid(): # validate
-			# save partially complete Video model from form data
-			uploaded_video = upload_form.save(commit=False)
-			uploaded_video.uploader 	 = user
-			uploaded_video.converted	 = False
-			uploaded_video.rating		 = 0
-			uploaded_video.favorites     = 0
-			uploaded_video.views		 = 0
-			title_slug					 = str(uploaded_video.title).lower()
-		 	title_slug 					 = title_slug.replace(' ','-')
-			uploaded_video.title_slug    = title_slug
+			# Create a partially complete Video object from form data
+			video 			 = upload_form.save(commit=False)
+			video.uploader 	 = uploader
+			video.converted	 = False
+			video.rating	 = 0
+			video.favorites  = 0
+			video.views		 = 0
+			title_slug		 = str(video.title).lower()
+		 	title_slug 		 = title_slug.replace(' ','-')
+			video.title_slug = title_slug
 			# Get some basic file info
-			filename = str(uploaded_video.source_file.name)
-			# filesize = uploaded_video.source_file.size
-			uploaded_video.save()
-			# further process Video to fill in missing data / + upload_form to save m2m (django-taggit)
+			video.src_filename = str(video.src_file.name)
+			video.file_size    = video.src_file.size
+			video.save()
+			# Get id from newly created record for passing into ProcessVideoTask
+			video_id = video.id
+			# Save m2m fields (necessary for django-taggit)
 			upload_form.save_m2m()
-			# process_uploaded_video(uploaded_video, upload_form)
-			ProcessVideoTask.delay(filename)
+			# ProcessVideoTask (CELERY) pass in filename and video id
+			ProcessVideoTask.delay(video_id)
 			return HttpResponseRedirect('/video/upload/success/') # redirect user
 	else:
 		upload_form = VideoForm()

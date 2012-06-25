@@ -8,26 +8,27 @@ into the utilities necessary to inject metadata (yamdi, flvtool2) and generate t
 
 Also, update additional Video object model properties down here
 """
-def convert_uploaded_video(filename):
-	## TODO: add suppt. for HTML5 video formats 
-	# Get video id to use for filename
-	video_id	= 'test'
+def convert_uploaded_video(video_id):
+	# Retrieve video from db by id
+	video = Video.objects.get(id=video_id)
+
 	# Set source and destination paths for ffmpeg (and other tools)
-	src_path    = MEDIA_ROOT + '/videos/src/' + filename
+	src_path    = MEDIA_ROOT + '/videos/src/' + video.src_filename
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
+
 	# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings)
 	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
 	os.system(ffmpeg_call)
+
 	# Delete sauce file
 	call = subprocess.call(['rm', str(src_path)])
-	# Commit additional data to Video object model in db #
-	"""
-	uploaded_video.length 	      = get_video_length(dest_path)
-	uploaded_video.converted_file = dest_path
-	uploaded_video.source_file    = ""
-	uploaded_video.converted  	  = True
-	uploaded_video.save()
-	"""
+
+	# Commit additional data of processed video to db #
+	video.length 	      = get_video_length(dest_path)
+	video.converted_file  = dest_path
+	video.src_file        = ""
+	video.converted  	  = True
+	video.save()
 
 """
 Utility function to return the length of a video from ffmpeg output 
