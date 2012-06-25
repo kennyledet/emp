@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from videos.models			import Video
 from videos.forms 			import VideoForm
 from videos.utils 			import *
+from videos.tasks			import ProcessVideoTask
 """
 Video play page(s)
 Workflow:
@@ -40,9 +41,22 @@ def video_upload(request):
 		if upload_form.is_valid(): # validate
 			# save partially complete Video model from form data
 			uploaded_video = upload_form.save(commit=False)
-			uploaded_video.uploader = user
+			uploaded_video.uploader 	 = user
+			uploaded_video.converted	 = False
+			uploaded_video.rating		 = 0
+			uploaded_video.favorites     = 0
+			uploaded_video.views		 = 0
+			title_slug					 = str(uploaded_video.title).lower()
+		 	title_slug 					 = title_slug.replace(' ','-')
+			uploaded_video.title_slug    = title_slug
+			# Get some basic file info
+			filename = str(uploaded_video.source_file.name)
+			# filesize = uploaded_video.source_file.size
+			uploaded_video.save()
 			# further process Video to fill in missing data / + upload_form to save m2m (django-taggit)
-			process_uploaded_video(uploaded_video, upload_form)
+			upload_form.save_m2m()
+			# process_uploaded_video(uploaded_video, upload_form)
+			ProcessVideoTask.delay(filename)
 			return HttpResponseRedirect('/video/upload/success/') # redirect user
 	else:
 		upload_form = VideoForm()

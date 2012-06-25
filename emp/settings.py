@@ -1,6 +1,21 @@
 # Django settings for emp project.
 import os.path
-import dj_database_url
+
+# HEROKU DEPLOYMENT
+# URL-based db for Heroku
+# import dj_database_url
+# DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+
+# django-celery settings
+import djcelery
+djcelery.setup_loader()
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -11,9 +26,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-# HEROKU DEPLOYMENT
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
-"""
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -24,7 +37,7 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-"""
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -126,11 +139,16 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'videos',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    # videos app - K. Ledet
+    'videos',
     # django-taggit
     'taggit',
+    # django-celery
+    'djcelery',
+    # django-kombu
+    'djkombu',
 )
 
 # A sample logging configuration. The only tangible logging

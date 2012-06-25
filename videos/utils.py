@@ -42,10 +42,10 @@ into the utilities necessary to inject metadata (yamdi, flvtool2) and generate t
 
 Also, update additional Video object model properties down here
 """
-def convert_uploaded_video(filename, uploaded_video):
+def convert_uploaded_video(filename):
 	## TODO: add suppt. for HTML5 video formats 
 	# Get video id to use for filename
-	video_id	= uploaded_video.id
+	video_id	= 'test'
 	# Set source and destination paths for ffmpeg (and other tools)
 	src_path    = MEDIA_ROOT + '/videos/src/' + filename
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
@@ -55,11 +55,13 @@ def convert_uploaded_video(filename, uploaded_video):
 	# Delete sauce file
 	call = subprocess.call(['rm', str(src_path)])
 	# Commit additional data to Video object model in db #
+	"""
 	uploaded_video.length 	      = get_video_length(dest_path)
 	uploaded_video.converted_file = dest_path
 	uploaded_video.source_file    = ""
 	uploaded_video.converted  	  = True
 	uploaded_video.save()
+	"""
 
 """
 Utility function to return the length of a video from ffmpeg output 
