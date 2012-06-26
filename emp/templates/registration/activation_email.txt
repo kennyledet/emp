@@ -1,2 +1,4 @@
 Hey, you registered at {{ site }}! Our system deletes your account if you haven't activated it in 60 days,
 so please do so by clicking the link below.
+
+<a href="127.0.0.1:8000/accounts/activate/{{ activation_key }}">Activate Account</a>
