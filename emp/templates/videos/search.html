@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}
+	<title>Search Results</title>
+{% endblock %}
+
+{% block main_content %}
+
+	{% if query != '' %}
+	<p>Found {{ videos|length }} video{{ videos|pluralize }} for: {{ query }}</p>
+
+  {% for video in videos %}
+    <li>
+    	<h6>{{ video.title }}</h6>
+    	<p>{{ video.upload_datetime }}</p>
+    	<p>{{ video.uploader }}</p>
+    	<a href="/videos/play/{{ video.id }}">Watch</a>
+    </li>
+  {% endfor %}
+
+	{% endif %}
+
+{% endblock %}

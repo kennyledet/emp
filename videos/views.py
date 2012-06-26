@@ -79,17 +79,20 @@ def videos(request):
 	videos = Video.objects.all().order_by('-upload_datetime')
 	return render_to_response('videos/videos.html', locals())
 
+
 def videos_search(request):
-	user = request.user
-	query_empty = False
-	no_query    = False
-	if request.GET['query']:
-		query = request.GET['query']
+	empty_query = False
+	# if ?q=* is in uri
+	if 'q' in request.GET:
+		query = request.GET['q']
+		# if query string is empty
 		if not query:
-			query_empty = True
+			empty_query = True
 		else:
-			videos = Video.objects.filter(title__icontains=query).order_by(('-upload_datetime',))
-			return render_to_response('videos/videos_search_results.html', locals())
-	else:
-		no_query = True
-	return render_to_response('videos/videos_search_results.html', locals())
+		# perform non-case sensitive search on title column
+		# get rows of videos as list of Video objects
+			videos = Video.objects.filter(title__icontains=query)
+			return render_to_response('videos/search.html', locals())
+	# if no query entered or query string is empty, display form
+	# if empty_query = True (query string empty) , display error msg
+	return render_to_response('videos/search_form.html', locals())
