@@ -25,6 +25,7 @@ def video(request, video_id, video_title_slug=None):
 """
 Handle video uploads here
 Workflow: 
+	User must be logged in
 	Process video upload form
 	Pass into videos.tasks.ProcessVideoTask Celery task
 	Redirect the user to the video upload success page

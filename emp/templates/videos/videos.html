@@ -7,7 +7,7 @@
 	<hr>
 	{% for video in videos %}
 	  <h3>{{ video.title }}</h3>
-	  <a href="/video/{{ video.id }}">Play</a>
+	  <a href="/videos/play/{{ video.id }}">Play</a>
 	{% endfor %}
 
 {% endblock %}
