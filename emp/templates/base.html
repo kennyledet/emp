@@ -45,7 +45,7 @@
                 {% if user.is_authenticated %}
                   {{ user }}
                 {% else %}
-                  Guest
+                  Guest - Login/Register
                 {% endif %}
               <span class="caret"></span>
             </a>
@@ -53,10 +53,10 @@
                 {% if user.is_authenticated %}
                   <li><a href="#">Profile</a></li>
                   <li class="divider"></li>
-                  <li><a href="/user/logout">Sign Out</a></li>
+                  <li><a href="/accounts/logout">Sign Out</a></li>
                 {% else %}
-                  <li><a href="#">Register</a></li>
-                  <li><a href="/user/login">Login</a></li>
+                  <li><a href="/accounts/register">Register</a></li>
+                  <li><a href="/accounts/login">Login</a></li>
                 {% endif %}
             </ul>
           </div>

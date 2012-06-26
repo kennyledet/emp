@@ -4,7 +4,6 @@ from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from videos.models			import Video
 from videos.forms 			import VideoForm
-from videos.utils 			import *
 from videos.tasks			import ProcessVideoTask
 """
 Video play page(s)
@@ -30,7 +29,7 @@ Workflow:
 	Pass into videos.tasks.ProcessVideoTask Celery task
 	Redirect the user to the video upload success page
 """
-@login_required(login_url='/user/login/')
+@login_required(login_url='/accounts/login/')
 def video_upload(request):
 	csrfContext = RequestContext(request)
 	# get user/uploader

@@ -149,7 +149,12 @@ INSTALLED_APPS = (
     'djcelery',
     # django-kombu
     'djkombu',
+    # django-registration
+    'registration',
 )
+
+# django-registration account activation window
+ACCOUNT_ACTIVATION_DAYS = 60
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
