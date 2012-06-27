@@ -2,6 +2,7 @@ import os
 import subprocess
 from   emp.settings  import MEDIA_ROOT
 from   videos.models import Video
+from   pymediainfo   import MediaInfo
 """
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
@@ -42,7 +43,12 @@ def get_video_length(path):
 	proc_output = proc.communicate()
 	return proc_output[0]
 
-
+"""
+Utility function to return the codec of a video from mediainfo output
+Utilize this in ProcessVideoTask to determine codec of src file for:
+	1. validation
+	2. deciding which conversion function to use (diff. srcfiles may have diff. reqs.)
+"""
 def get_vid_type(path):
 	media_info = MediaInfo.parse(path)
 	for track in media_info.tracks:
