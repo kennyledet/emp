@@ -41,3 +41,8 @@ class Video(models.Model):
 
 	def __unicode__(self):
 		return self.title
+
+class HTML5Profiles(models.Model):
+	title  = models.CharField(max_length=255)
+	vcodec = models.CharField(max_length=255)
+	

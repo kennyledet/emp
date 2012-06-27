@@ -1,0 +1,14 @@
+latest version of ffmpeg (--enable-libmp3lame --enable-shared)
+libx264
+libvpx
+libvorbis
+libogg
+xvid
+theora
+mad
+media-info
+faac
+opencoreamr
+faad2
+lame
+jpeg
