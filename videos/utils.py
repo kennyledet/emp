@@ -59,7 +59,7 @@ def get_vid_type(path):
 	proc = subprocess.Popen("ffprobe -show_format -show_streams -loglevel quiet -print_format json " + path, shell=True, stdout=subprocess.PIPE)
 	json_source  = proc.communicate()[0]
 	json_output  = json.loads(json_source)
-	video_stream = json_ouput['streams'][1]
+	video_stream = json_output['streams'][1]
 	codec 		 = video_stream['codec_name']
 	return codec
 
