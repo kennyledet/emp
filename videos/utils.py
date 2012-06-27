@@ -1,5 +1,7 @@
 import os
 import subprocess
+import json
+
 from   emp.settings  import MEDIA_ROOT
 from   videos.models import Video
 
@@ -19,7 +21,7 @@ def convert_uploaded_video(video_id):
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
 	
 	# Get src video codec
-	video.vidtype = get_vid_type(src_path)
+	video.src_vidtype = str(get_vid_type(src_path))
 
 	# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings)
 	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
@@ -30,8 +32,9 @@ def convert_uploaded_video(video_id):
 
 	# Commit additional data of processed video to db #
 	video.length 	      = get_video_length(dest_path)
+	video.vidtype         = str(get_vid_type(dest_path))
 	video.converted_file  = dest_path
-	video.src_file        = ""
+	# video.src_file        = ""
 	video.converted       = True
 	video.save()
 
@@ -53,9 +56,10 @@ Utilize this in ProcessVideoTask to determine codec of src file for:
 	2. deciding which conversion function to use (diff. srcfiles may have diff. reqs.)
 """
 def get_vid_type(path):
-	pass
-
-
-
-
+	proc = subprocess.Popen("ffprobe -show_format -show_streams -loglevel quiet -print_format json " + path, shell=True, stdout=subprocess.PIPE)
+	json_source  = proc.communicate()[0]
+	json_output  = json.loads(json_source)
+	video_stream = json_ouput['streams'][1]
+	codec 		 = video_stream['codec_name']
+	return codec
 
