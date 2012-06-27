@@ -7,6 +7,7 @@ Utility functions to pass uploaded video data into ffmpeg/mencoder to be convert
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
 
 Also, update additional Video object model properties down here
+Note: Data is safe to pass into cmds, the necessary data validation is handled further back in the stack
 """
 def convert_uploaded_video(video_id):
 	# Retrieve video from db by id
@@ -27,12 +28,14 @@ def convert_uploaded_video(video_id):
 	video.length 	      = get_video_length(dest_path)
 	video.converted_file  = dest_path
 	video.src_file        = ""
-	video.converted  	  = True
+	video.converted       = True
 	video.save()
 
 """
 Utility function to return the length of a video from ffmpeg output 
 In this format: 00:00:00.00  h:m:s.ms
+TODO: 
+	- refactor get_video_length to use Mediainfo
 """
 def get_video_length(path):
 	proc        = subprocess.Popen("ffmpeg -i "+ path +" 2>&1 | grep Duration | awk '{print $2}' | tr -d ,", shell=True, stdout=subprocess.PIPE)
@@ -40,7 +43,8 @@ def get_video_length(path):
 	return proc_output[0]
 
 
-"""
 def get_vid_type(path):
-	pass
-"""
+	media_info = MediaInfo.parse(path)
+	for track in media_info.tracks:
+		if track.track_type == 'Video':
+			codec = track.codec
