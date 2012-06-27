@@ -4,5 +4,6 @@ venv
 *.mp4
 *.flv
 *.avi
+*.swp
 todo.txt
 distribute-0.6.15.tar.gz

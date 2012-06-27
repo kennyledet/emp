@@ -7,3 +7,4 @@ django-taggit
 django-celery
 django-kombu
 django-registration
+

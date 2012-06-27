@@ -2,7 +2,7 @@ import os
 import subprocess
 from   emp.settings  import MEDIA_ROOT
 from   videos.models import Video
-from   pymediainfo   import MediaInfo
+
 """
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
@@ -17,6 +17,9 @@ def convert_uploaded_video(video_id):
 	# Set source and destination paths for ffmpeg (and other tools)
 	src_path    = MEDIA_ROOT + '/videos/src/' + video.src_filename
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
+	
+	# Get src video codec
+	video.vidtype = get_vid_type(src_path)
 
 	# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings)
 	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
@@ -44,13 +47,15 @@ def get_video_length(path):
 	return proc_output[0]
 
 """
-Utility function to return the codec of a video from mediainfo output
+Utility function to return the codec of a video from ffprobe json output
 Utilize this in ProcessVideoTask to determine codec of src file for:
 	1. validation
 	2. deciding which conversion function to use (diff. srcfiles may have diff. reqs.)
 """
 def get_vid_type(path):
-	media_info = MediaInfo.parse(path)
-	for track in media_info.tracks:
-		if track.track_type == 'Video':
-			codec = track.codec
+	pass
+
+
+
+
+
