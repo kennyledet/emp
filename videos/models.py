@@ -1,8 +1,11 @@
+import os
 from django.db import models
 # Import User model
 from django.contrib.auth.models import User
 # Import django-taggit manager
 from taggit.managers import TaggableManager
+# Import MEDIA_ROOT
+from emp.settings    import MEDIA_ROOT
 
 
 class Category(models.Model):
@@ -11,6 +14,8 @@ class Category(models.Model):
 
 	def __unicode__(self):
 		return self.category_title
+
+# TODO: Add model method to calculate hours, minutes, seconds from length 00:00:00.00
 
 class Video(models.Model):
 	title 		= models.CharField(max_length=255)
@@ -42,7 +47,15 @@ class Video(models.Model):
 	def __unicode__(self):
 		return self.title
 
+	def get_thumbs(self):
+		thumbs_path = MEDIA_ROOT + '/videos/thumbs/'+ str(self.id) +'/'
+		thumbs_list = os.listdir(thumbs_path)
+		thumbs_list.remove('.DS_Store')
+		return thumbs_path, thumbs_list
+
+"""
 class HTML5Profiles(models.Model):
 	title  = models.CharField(max_length=255)
 	vcodec = models.CharField(max_length=255)
+"""
 	
