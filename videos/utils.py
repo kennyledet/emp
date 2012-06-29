@@ -92,11 +92,7 @@ Utility function to generate video thumbnails and save them to /media/videos/thu
 def generate_video_thumbs(path, video_id):
 	dest_path	  = MEDIA_ROOT + '/videos/thumbs/'+ str(video_id) +'/'
 	create_path(dest_path)
-	# generate 10 thumbs 
-	# 10 in 10 seconds , step of 1
-	# 10 in 20 seconds , step of 2
-	# 10 in 120 seconds , step of 12
-	# if video < 10 seconds, use a step of 1
+
 	total_seconds = get_total_seconds(path)
 	frame = 1
 	if total_seconds < 10:

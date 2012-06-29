@@ -19,8 +19,6 @@ def video(request, video_id, video_title_slug=None):
 	user = request.user
 	video_id = video_id
 	video    = Video.objects.get(id=video_id)
-	# retrieve video thumbnails using model method
-	thumbs_path, thumbs   = video.get_thumbs()
 	return render_to_response('videos/video.html', locals())
 
 """

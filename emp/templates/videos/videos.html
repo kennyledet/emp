@@ -9,9 +9,8 @@
 	{% for video in videos %}
 
 	  <h3>{{ video.title }}</h3>
-
 	  {% for thumb in video.thumbs_list %}
-	  		<img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/>
+	  		<img style="width:100px, height:100px;" src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/>
 	  {% endfor %}
 
 	  <a href="/videos/play/{{ video.id }}">Play</a>

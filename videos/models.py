@@ -53,6 +53,7 @@ class Video(models.Model):
 		if '.DS_Store' in thumbs_list:
 			thumbs_list.remove('.DS_Store')
 		return thumbs_list
+
 	thumbs_list = property(_get_thumbs)
 
 """
