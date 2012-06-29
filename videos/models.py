@@ -56,6 +56,7 @@ class Video(models.Model):
 
 	thumbs_list = property(_get_thumbs)
 
+
 """
 class HTML5Profiles(models.Model):
 	title  = models.CharField(max_length=255)

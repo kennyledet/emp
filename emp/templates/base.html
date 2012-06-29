@@ -27,6 +27,10 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    {% block extra_styles %}
+
+    {% endblock %}
   </head>
 
   <body>
@@ -111,6 +115,8 @@
     <script src="fluid_files/bootstrap-typeahead.js"></script>
     -->
     
-  
+    {% block extra_javascript %}
+
+    {% endblock %}
 
 </body></html>

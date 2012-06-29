@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}<title>Videos</title>{% endblock %}
 
+{% block extra_styles %}
+
+{% endblock %}
+
 {% block main_content %}
 
 	<h4>Videos - Placeholder</h4>
@@ -9,12 +13,55 @@
 	{% for video in videos %}
 
 	  <h3>{{ video.title }}</h3>
-	  {% for thumb in video.thumbs_list %}
-	  		<img style="width:100px, height:100px;" src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/>
-	  {% endfor %}
+	  <!--
+	  <div class="slideshow-block">
+	  	<a href="/videos/play/{{ video.id }}" class="link"></a>
+	  	<ul class="slides">
+		  {% for thumb in video.thumbs_list %}
+		  		<li><img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/></li>
+		  {% endfor %}
+	  	</ul>
+	  </div> -->
+<div class="slideshow">
+	<!--
+    <div class="controls" style="display: none; ">
+        <span><a href="" id="prev">Prev</a></span>
+        <span><a href="" id="next">Next</a></span>
+        <span><a href="" id="pause">Pause</a></span>
+        <span><a href="" id="play">Play</a></span>
+    </div>
+-->
+    <div class="slides pics" style="position: relative; ">   
+      {% for thumb in video.thumbs_list %}                        
+        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" width="320" height="240" style="position: absolute; top: 0px; left: 0px; width: 320px; height: 240px; z-index: 8; opacity: 0; display: none; "> 
+      {% endfor %}
+    </div>
+</div>
 
 	  <a href="/videos/play/{{ video.id }}">Play</a>
 
 	{% endfor %}
 
+{% endblock %}
+
+{% block extra_javascript %}
+{# jquery cycle - video thumbnail cycling #}
+	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
+
+	<script type="text/javascript">
+	$(function() {
+	    $('.slideshow').hover(
+	        function() { $('.slides').cycle('resume'); },
+	        function() { $('.slides').cycle('pause'); }
+	    );
+	    
+	    $('.slides').cycle({
+	        fx:     'fade',
+	        speed:   .3,
+	        timeout: 280,
+	        next:   '#next',
+	        prev:   '#prev'
+	    }).cycle("pause");
+	});
+	</script>
 {% endblock %}

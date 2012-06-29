@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block main_content %}
-	{% for thumb in thumbs %}
+	{% for thumb in video.thumbs_list %}
 	  <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/>
 	{% endfor %}
 
