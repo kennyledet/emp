@@ -101,7 +101,7 @@ def generate_video_thumbs(path, video_id):
 		step = total_seconds / 10
 		
 	for i in range(10):
-		os.system("ffmpeg -ss "+ str(frame) +" -i "+ path +" -vframes 1 -f image2 -s 320x240 "+dest_path + str(i)+".jpg")
+		os.system("ffmpeg -ss "+ str(frame) +" -i "+ path +" -vframes 1 -f image2 -s 125x125 "+dest_path + str(i)+".jpg")
 		frame = frame + step
 
 """

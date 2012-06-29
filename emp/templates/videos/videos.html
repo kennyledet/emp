@@ -9,15 +9,16 @@
 
 	<h4>Videos - Placeholder</h4>
 	<hr>
+	<div class="container">
 	{% for video in videos %}
 	{% if video.converted %}
-	<div class="span4">
+	<div class="span2">
 	    <h3>{{ video.title }}</h3>
 
-		<div class="slideshow" width="320">
+		<div class="slideshow" width="125">
 		    <div class="slides pics" style="position: relative; ">   
 		      {% for thumb in video.thumbs_list %}                        
-		        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" width="320" height="240" style="position: absolute; top: 0px; left: 0px; width: 320px; height: 240px; z-index: 8; opacity: 0; display: none; "> 
+		        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; "> 
 		      {% endfor %}
 		    </div>
 		</div>
@@ -26,48 +27,25 @@
 	</div>
 	{% endif %}
 	{% endfor %}
+	</div>
 
 {% endblock %}
 
 {% block extra_javascript %}
 {# jquery cycle - video thumbnail cycling #}
 	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
-
-<script type="text/javascript">
-$(".slideshow").each(function() {
-    $(this).find(".slides").cycle({
-        fx:     'fade',
-        speed:   .3,
-        timeout: 280,
-        next:   '#next',
-        prev:   '#prev'
-    }).cycle("pause").end().hover(
-        function() { $(this).find('.slides').cycle('resume'); },
-        function() { $(this).find('.slides').cycle('pause'); }
-    );
-});
-
-</script>
-
-<!--
 	<script type="text/javascript">
-	$(function() {
-	    $('.slideshow').each(function() {
-	    	$(this).hover(
-	        function() { $(this).('.slides').cycle('resume'); },
-	        function() { $(this).('.slides').cycle('pause'); }
-	    });
-	    
-	    $('.slides').each(function() {
-	    	$(this).cycle({
+	$(".slideshow").each(function() {
+	    $(this).find(".slides").cycle({
 	        fx:     'fade',
 	        speed:   .3,
 	        timeout: 280,
 	        next:   '#next',
 	        prev:   '#prev'
-	    }).cycle("pause");
-	    });
+	    }).cycle("pause").end().hover(
+	        function() { $(this).find('.slides').cycle('resume'); },
+	        function() { $(this).find('.slides').cycle('pause'); }
+	    );
 	});
 	</script>
--->
 {% endblock %}
