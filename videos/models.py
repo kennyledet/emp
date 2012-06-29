@@ -47,11 +47,13 @@ class Video(models.Model):
 	def __unicode__(self):
 		return self.title
 
-	def get_thumbs(self):
+	def _get_thumbs(self):
 		thumbs_path = MEDIA_ROOT + '/videos/thumbs/'+ str(self.id) +'/'
 		thumbs_list = os.listdir(thumbs_path)
-		thumbs_list.remove('.DS_Store')
-		return thumbs_path, thumbs_list
+		if '.DS_Store' in thumbs_list:
+			thumbs_list.remove('.DS_Store')
+		return thumbs_list
+	thumbs_list = property(_get_thumbs)
 
 """
 class HTML5Profiles(models.Model):

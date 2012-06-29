@@ -5,9 +5,17 @@
 
 	<h4>Videos - Placeholder</h4>
 	<hr>
+
 	{% for video in videos %}
+
 	  <h3>{{ video.title }}</h3>
+
+	  {% for thumb in video.thumbs_list %}
+	  		<img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}"/>
+	  {% endfor %}
+
 	  <a href="/videos/play/{{ video.id }}">Play</a>
+
 	{% endfor %}
 
 {% endblock %}

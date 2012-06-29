@@ -78,6 +78,14 @@ TODO:
 def videos(request):
 	user = request.user
 	videos = Video.objects.all().order_by('-upload_datetime')
+	# thumbs_list = []
+	# thumbs_dict = {}
+	"""
+	for video in videos:
+		thumbs_path, thumbs = video.get_thumbs()
+		thumbs_list += [(video.id, thumbs)]
+	thumbs_dict = dict(thumbs_list)
+	"""
 	return render_to_response('videos/videos.html', locals())
 
 
