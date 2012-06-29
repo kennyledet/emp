@@ -33,20 +33,41 @@
 {# jquery cycle - video thumbnail cycling #}
 	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
 
+<script type="text/javascript">
+$(".slideshow").each(function() {
+    $(this).find(".slides").cycle({
+        fx:     'fade',
+        speed:   .3,
+        timeout: 280,
+        next:   '#next',
+        prev:   '#prev'
+    }).cycle("pause").end().hover(
+        function() { $(this).find('.slides').cycle('resume'); },
+        function() { $(this).find('.slides').cycle('pause'); }
+    );
+});
+
+</script>
+
+<!--
 	<script type="text/javascript">
 	$(function() {
-	    $('.slideshow').hover(
-	        function() { $('.slides').cycle('resume'); },
-	        function() { $('.slides').cycle('pause'); }
-	    );
+	    $('.slideshow').each(function() {
+	    	$(this).hover(
+	        function() { $(this).('.slides').cycle('resume'); },
+	        function() { $(this).('.slides').cycle('pause'); }
+	    });
 	    
-	    $('.slides').cycle({
+	    $('.slides').each(function() {
+	    	$(this).cycle({
 	        fx:     'fade',
 	        speed:   .3,
 	        timeout: 280,
 	        next:   '#next',
 	        prev:   '#prev'
 	    }).cycle("pause");
+	    });
 	});
 	</script>
+-->
 {% endblock %}
