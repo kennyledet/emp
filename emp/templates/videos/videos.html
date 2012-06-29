@@ -10,6 +10,7 @@
 	<h4>Videos - Placeholder</h4>
 	<hr>
 	{% for video in videos %}
+	{% if video.converted %}
 	<div class="span4">
 	    <h3>{{ video.title }}</h3>
 
@@ -23,6 +24,7 @@
 
 	    <a href="/videos/play/{{ video.id }}">Play</a>
 	</div>
+	{% endif %}
 	{% endfor %}
 
 {% endblock %}
