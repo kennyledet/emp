@@ -24,7 +24,7 @@ def convert_uploaded_video(video_id):
 	generate_video_thumbs(src_path, video_id)
 
 	# Get src video codec
-	video.src_vidtype = str(get_video_type(src_path, 'src'))
+	video.src_vidtype = str(get_video_type(src_path))
 
 	# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings)
 	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
@@ -35,7 +35,7 @@ def convert_uploaded_video(video_id):
 
 	# Commit additional data of processed video to db #
 	video.length 	      = get_video_length(dest_path)
-	video.vidtype         = str(get_video_type(dest_path, 'dest'))
+	video.vidtype         = str(get_video_type(dest_path,))
 	video.converted_file  = dest_path
 	# video.src_file        = ""
 	video.converted       = True
@@ -70,18 +70,20 @@ Utilize this in ProcessVideoTask to determine codec of src file for:
 	1. validation
 	2. deciding which conversion function to use (diff. srcfiles may have diff. reqs.)
 """
-def get_video_type(path, path_type):
-	if path_type == 'src':
-		stream_num = 1
-	else:
-		stream_num = 0
+def get_video_type(path):
 
 	proc = subprocess.Popen("ffprobe -show_format -show_streams -loglevel quiet -print_format json " + path, shell=True, stdout=subprocess.PIPE)
 	
 	json_source  = proc.communicate()[0]
 	json_output  = json.loads(json_source)
-	video_stream = json_output['streams'][stream_num]
-	codec 		 = video_stream['codec_name']
+	streams      = json_output['streams']
+
+	# figure which stream is video stream
+	for stream in streams:
+		if stream['codec_type'] == 'video':
+			video_stream = stream
+
+	codec = video_stream['codec_name']
 	return codec
 
 """
