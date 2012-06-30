@@ -8,7 +8,6 @@ class VideoAdmin(admin.ModelAdmin):
 
 	date_hierarchy = 'upload_datetime'
 
-
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Category)
 admin.site.register(VideoPlaylist)

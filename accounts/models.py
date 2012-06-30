@@ -18,8 +18,8 @@ class UserProfile(models.Model):
 
 
 
-	video_bookmarks = models.ManyToManyField(Video)
-	playlists 		= models.ManyToManyField(VideoPlaylist)
+	video_bookmarks = models.ManyToManyField(Video, blank=True, null=True)
+	playlists 		= models.ManyToManyField(VideoPlaylist, blank=True, null=True)
 
 	# TODO: Implement these fields when the appropriate models are ready # 
 	"""

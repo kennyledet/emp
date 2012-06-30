@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ username }}'s profile</title>
+{% endblock %}
+
+{% block main_content %}
+
+	{% if user_owns_profile %}
+	  <h6>Hello, {{ username }}. This is your profile :).</h6>
+	{% else %}
+	  <h6>Welcome to {{ profile.user }}'s profile.</h6>
+	{% endif %}
+	<hr>
+
+	<img src="/media/{{ profile.profile_pic }}">
+	<h3>Username: {{ profile.user }}</h3>
+	<h4>Website: <a href="{{ profile.website }}">{{ profile.website }}</a></h4>
+
+
+{% endblock %}

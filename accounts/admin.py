@@ -7,8 +7,6 @@ class UserProfileAdmin(admin.ModelAdmin):
 	list_filter    = ('',)
 	search_fields  = ('',)
 	"""
-
 	date_hierarchy = 'join_date'
-
 
 admin.site.register(UserProfile)
