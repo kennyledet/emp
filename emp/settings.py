@@ -143,6 +143,8 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     # videos app - K. Ledet
     'videos',
+    # accounts app (holds UserProfile) - K. Ledet
+    'accounts',
     # django-taggit
     'taggit',
     # django-celery

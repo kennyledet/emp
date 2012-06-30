@@ -14,7 +14,7 @@ class UserProfile(models.Model):
 	website = models.URLField(blank=True, null=True)
 	premium = models.BooleanField()
 
-	profile_pic = models.ImageField(upload_to('profiles/pics/'))
+	profile_pic = models.FileField(upload_to='profiles/pics/')
 
 
 
