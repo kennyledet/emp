@@ -58,13 +58,13 @@ class Video(models.Model):
 
 
 class VideoPlaylist(models.Model):
+	title  = models.CharField(max_length=255)
 	videos = models.ManyToManyField(Video)
 
 	created_datetime  = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
 
 	created_by = models.ForeignKey(User, related_name='+')
-	# Come up with a better name for this field!
 	added_by = models.ManyToManyField(User, related_name='++')
 
 
