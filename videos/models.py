@@ -57,6 +57,27 @@ class Video(models.Model):
 	thumbs_list = property(_get_thumbs)
 
 
+class VideoPlaylist(models.Model):
+	videos = models.ManyToManyField(Video)
+
+	created_datetime  = models.DateTimeField(auto_now_add=True)
+	modified_datetime = models.DateTimeField(auto_now=True)
+
+	created_by = models.ForeignKey(User)
+	# Come up with a better name for this field!
+	added_by = models.ManyToManyField(User)
+
+
+
+
+
+
+
+
+
+
+
+
 """
 class HTML5Profiles(models.Model):
 	title  = models.CharField(max_length=255)
