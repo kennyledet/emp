@@ -63,9 +63,9 @@ class VideoPlaylist(models.Model):
 	created_datetime  = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
 
-	created_by = models.ForeignKey(User)
+	created_by = models.ForeignKey(User, related_name='+')
 	# Come up with a better name for this field!
-	added_by = models.ManyToManyField(User)
+	added_by = models.ManyToManyField(User, related_name='++')
 
 
 

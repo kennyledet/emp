@@ -1,6 +1,8 @@
 from django.db import models
 # Import User model
 from django.contrib.auth.models import User
+# Import Video and VideoPlaylist
+from videos.models 				import Video, VideoPlaylist
 
 class UserProfile(models.Model):
 	# required for associating with a single user
@@ -21,7 +23,6 @@ class UserProfile(models.Model):
 
 	# TODO: Implement these fields when the appropriate models are ready # 
 	"""
-
 	gallery_bookmarks = models.ManyToManyField(Gallery)
 	image_bookmarks   = models.ManyToManyField(Pic)
 	"""
