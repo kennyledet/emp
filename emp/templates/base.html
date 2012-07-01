@@ -55,7 +55,7 @@
             </a>
             <ul class="dropdown-menu">
                 {% if user.is_authenticated %}
-                  <li><a href="#">Profile</a></li>
+                  <li><a href="/profiles/{{ user }}">Profile</a></li>
                   <li class="divider"></li>
                   <li><a href="/accounts/logout">Sign Out</a></li>
                 {% else %}
