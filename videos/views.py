@@ -2,7 +2,7 @@ from django.shortcuts       import render_to_response
 from django.template 		import RequestContext
 from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from videos.models			import Video
+from videos.models			import Video, VideoPlaylist
 from videos.forms 			import VideoForm
 from videos.tasks			import ProcessVideoTask
 """
@@ -103,3 +103,16 @@ def videos_search(request):
 	# if no query entered or query string is empty, display form
 	# if empty_query = True (query string empty) , display error msg
 	return render_to_response('videos/search_form.html', locals())
+
+
+
+
+"""
+Video playlist page view
+"""
+def video_playlist(request, playlist_id):
+	playlist = VideoPlaylist.objects.get(id=playlist_id)
+
+	playlist_videos = playlist.videos.all()
+	added_by 		= playlist.added_by.all()
+	

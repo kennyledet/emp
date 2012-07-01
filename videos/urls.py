@@ -6,5 +6,6 @@ urlpatterns = patterns('videos.views',
     url(r'^search/$', 'videos_search', name='videos_search'),
     url(r'^upload/$', 'video_upload', name='video_upload'),
     url(r'^upload/success/$', 'video_upload_success', name='video_upload_success'),
+    url(r'^playlist/(?P<playlist_id>\d.*)/$', 'video_playlist'),
     # url(r'^categories/$', 'videos.views.categories' name='categories'),
     )
