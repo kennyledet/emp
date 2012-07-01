@@ -2,9 +2,9 @@ from django.shortcuts       import render_to_response
 from django.template 		import RequestContext
 from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models 	import User
 
 from accounts.models 			import UserProfile
-from django.contrib.auth.models import User
 
 def profile(request, username):
 	user = request.user
@@ -15,9 +15,11 @@ def profile(request, username):
 		user_owns_profile = False
 
 	# retrieve profile user
-	profile_user = User.objects.get(username=str(username))
+	profile_user 	= User.objects.get(username=str(username))
 	# retrieve profile using profile_user object
-	profile = UserProfile.objects.get(user=profile_user)
+	profile 		= UserProfile.objects.get(user=profile_user)
+	# retrieve profile video bookmarks (m2m field defined in UserProfile)
+	video_bookmarks = profile.video_bookmarks.all()
 
 
 
