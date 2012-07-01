@@ -20,6 +20,8 @@ def profile(request, username):
 	profile 		= UserProfile.objects.get(user=profile_user)
 	# retrieve profile video bookmarks (m2m field defined in UserProfile)
 	video_bookmarks = profile.video_bookmarks.all()
+	# retrieve profile playlists (m2m field defined in UserProfile)
+	playlists 		= profile.playlists.all()
 
 
 
