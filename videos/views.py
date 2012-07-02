@@ -115,4 +115,6 @@ def video_playlist(request, playlist_id):
 
 	playlist_videos = playlist.videos.all()
 	added_by 		= playlist.added_by.all()
+
+	return render_to_response('videos/video_playlist.html', locals())
 	

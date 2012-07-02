@@ -74,6 +74,11 @@ class VideoPlaylist(models.Model):
 	created_by = models.ForeignKey(User, related_name='+')
 	added_by = models.ManyToManyField(User, related_name='++')
 
+	def __unicode__(self):
+		return self.title
+
+
+
 
 
 
