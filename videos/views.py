@@ -16,7 +16,6 @@ Workflow:
 	Pass video object data to videos/video.html template
 """
 def video(request, video_id, video_title_slug=None):
-	user = request.user
 	video_id = video_id
 	video    = Video.objects.get(id=video_id)
 	return render_to_response('videos/video.html', locals())
@@ -64,7 +63,6 @@ def video_upload(request):
 	return render_to_response('videos/video_upload.html', {'upload_form': upload_form}, csrfContext)
 
 def video_upload_success(request):
-	user = request.user
 	return render_to_response('videos/video_upload_success.html')
 
 
@@ -74,16 +72,8 @@ TODO:
 	Implement pagination
 """
 def videos(request):
-	user = request.user
 	videos = Video.objects.all().order_by('-upload_datetime')
-	# thumbs_list = []
-	# thumbs_dict = {}
-	"""
-	for video in videos:
-		thumbs_path, thumbs = video.get_thumbs()
-		thumbs_list += [(video.id, thumbs)]
-	thumbs_dict = dict(thumbs_list)
-	"""
+
 	return render_to_response('videos/videos.html', locals())
 
 
