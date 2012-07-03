@@ -4,25 +4,30 @@ from django.contrib.auth.models import User
 # Import Video and VideoPlaylist
 from videos.models 				import Video, VideoPlaylist
 
+"""
+User profile models hold additional user data outside of default Django authentication fields and some ForeignKeys (video->uploader)
+Such as: birthdate, video favorites, video playlists, image favorites
+"""
+
+
 class UserProfile(models.Model):
 	# required for associating with a single user
 	user = models.OneToOneField(User)
-	join_date = models.DateField(auto_now_add=True)
 	birthday  = models.DateField(blank=True, null=True)
-
 
 	website = models.URLField(blank=True, null=True)
 	premium = models.BooleanField()
 
 	profile_pic = models.FileField(upload_to='profiles/pics/', blank=True, null=True)
 
-	video_bookmarks = models.ManyToManyField(Video, blank=True, null=True)
+	video_favorites = models.ManyToManyField(Video, blank=True, null=True)
 	video_playlists = models.ManyToManyField(VideoPlaylist, blank=True, null=True)
 
-
+	def __unicode__(self):
+		return self.user
 
 	# TODO: Implement these fields when the appropriate models are ready # 
 	"""
-	gallery_bookmarks = models.ManyToManyField(Gallery)
-	image_bookmarks   = models.ManyToManyField(Pic)
+	gallery_favorites = models.ManyToManyField(Gallery)
+	image_favorites   = models.ManyToManyField(Pic)
 	"""

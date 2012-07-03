@@ -31,8 +31,8 @@ class Video(models.Model):
 	rating		= models.IntegerField(choices=rating_choices)
 	categories  = models.ManyToManyField(Category)
 	tags 		= TaggableManager(blank=True)
-	favoriters	= models.ManyToManyField(User, related_name='+', blank=True, editable=False)
-	favorites   = models.IntegerField()
+	# favoriters	= models.ManyToManyField(User, related_name='+', blank=True, editable=False)
+	# favorites   = models.IntegerField()
 	nsfw		= models.BooleanField()
 	views 		= models.IntegerField()
 
