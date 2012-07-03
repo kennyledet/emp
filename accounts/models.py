@@ -8,18 +8,18 @@ class UserProfile(models.Model):
 	# required for associating with a single user
 	user = models.OneToOneField(User)
 	join_date = models.DateField(auto_now_add=True)
-	birthday  = models.DateField()
+	birthday  = models.DateField(blank=True, null=True)
 
 
 	website = models.URLField(blank=True, null=True)
 	premium = models.BooleanField()
 
-	profile_pic = models.FileField(upload_to='profiles/pics/')
-
-
+	profile_pic = models.FileField(upload_to='profiles/pics/', blank=True, null=True)
 
 	video_bookmarks = models.ManyToManyField(Video, blank=True, null=True)
-	playlists 		= models.ManyToManyField(VideoPlaylist, blank=True, null=True)
+	video_playlists = models.ManyToManyField(VideoPlaylist, blank=True, null=True)
+
+
 
 	# TODO: Implement these fields when the appropriate models are ready # 
 	"""

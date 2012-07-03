@@ -95,8 +95,6 @@ def videos_search(request):
 	return render_to_response('videos/search_form.html', locals())
 
 
-
-
 """
 Video playlist page view
 """
