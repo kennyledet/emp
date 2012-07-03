@@ -71,8 +71,10 @@ class VideoPlaylist(models.Model):
 	created_datetime  = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
 
-	created_by = models.ForeignKey(User, related_name='+')
-	added_by = models.ManyToManyField(User, related_name='++')
+	created_by = models.ForeignKey(User)
+	
+
+	##added_by = models.ManyToManyField(UserProfile, related_name='++')
 
 	def __unicode__(self):
 		return self.title

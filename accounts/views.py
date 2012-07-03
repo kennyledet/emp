@@ -22,9 +22,8 @@ def profile(request, username):
 	# retrieve profile video bookmarks (m2m field defined in UserProfile)
 	video_bookmarks = profile.video_bookmarks.all()
 	# retrieve profile playlists (m2m field defined in UserProfile)
-	playlists 		= profile.playlists.all()
-
-
+	# playlists 		= profile.playlists.all()
+	playlists = profile_user.videoplaylist_set.all()
 
 	# templates/accounts/user_profile.html <- accounts template folder is NOT part of django-registration
 	return render_to_response('accounts/user_profile.html', locals())
