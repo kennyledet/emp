@@ -16,7 +16,7 @@
 	<img src="/media/{{ user_profile.profile_pic }}">
 	<h3>Username: {{ user_profile.user }}</h3>
 	<h4>Website: <a href="{{ user_profile.website }}">{{ user_profile.website }}</a></h4>
-	<h4>Bookmarked Videos</h4>
+	<h4>Favorite Videos</h4>
 	{% for video in video_favorites %}
 	  <a href="/videos/play/{{ video.id }}/"><p>{{ video.title }}</p></a>
 	{% endfor %}

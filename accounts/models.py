@@ -13,7 +13,10 @@ Such as: birthdate, video favorites, video playlists, image favorites
 class UserProfile(models.Model):
 	# required for associating with a single user
 	user = models.OneToOneField(User)
+
 	birthday  = models.DateField(blank=True, null=True)
+	# location = 
+	# gender   =
 
 	website = models.URLField(blank=True)
 	premium = models.BooleanField()

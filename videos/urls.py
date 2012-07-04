@@ -7,5 +7,7 @@ urlpatterns = patterns('videos.views',
     url(r'^upload/$', 'video_upload', name='video_upload'),
     url(r'^upload/success/$', 'video_upload_success', name='video_upload_success'),
     url(r'^playlist/(?P<playlist_id>\d.*)/$', 'video_playlist'),
+    # TODO: implement this as AJAX
+    url(r'^favorite/$', 'favorite_video'),
     # url(r'^categories/$', 'videos.views.categories' name='categories'),
     )

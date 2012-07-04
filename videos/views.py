@@ -2,9 +2,14 @@ from django.shortcuts       import render_to_response
 from django.template 		import RequestContext
 from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models 	import User
+
 from videos.models			import Video, VideoPlaylist
 from videos.forms 			import VideoForm
 from videos.tasks			import ProcessVideoTask
+
+from accounts.models 		import UserProfile
+
 """
 Video play page(s)
 Workflow:
@@ -106,3 +111,26 @@ def video_playlist(request, playlist_id):
 
 	return render_to_response('videos/video_playlist.html', locals())
 	
+
+
+"""
+Allows a user to favorite a video (video gets added to favorites m2m in user profile)
+TODO: Implement this as AJAX on video play page
+"""
+@login_required(login_url='/accounts/login/')
+def favorite_video(request):
+	if 'f' in request.GET:
+		video_id     = request.GET['f']
+		if video_id:
+			# if favorite query string isn't empty, add it to user's favorites
+			video    	 = Video.objects.get(id=video_id)
+
+			user_profile = request.user.profile
+			user_profile.video_favorites.add(video)
+			return HttpResponseRedirect(request.META['HTTP_REFERER'])
+		else:
+			return HttpResponseRedirect(request.META['HTTP_REFERER'])
+	else:
+		return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+
