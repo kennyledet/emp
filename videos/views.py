@@ -65,7 +65,7 @@ def video_upload(request):
 			return HttpResponseRedirect('/videos/') # redirect user
 	else:
 		upload_form = VideoForm()
-	return render_to_response('videos/video_upload.html', {'upload_form': upload_form}, csrfContext)
+	return render_to_response('videos/video_upload.html', locals(), csrfContext)
 
 def video_upload_success(request):
 	return render_to_response('videos/video_upload_success.html')
