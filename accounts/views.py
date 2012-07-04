@@ -7,9 +7,9 @@ from django.contrib.auth.models 	import User
 from accounts.models 			import UserProfile
 from videos.models				import VideoPlaylist
 
-def profile(request, username):
+def user_profile(request, username):
 	user = request.user
-	# if the logged in user is the owner of the requested profile
+	# if the logged in user is the owner of the requested user profile
 	if str(user) == username:
 		user_owns_profile = True
 	else:
@@ -17,13 +17,13 @@ def profile(request, username):
 
 	# retrieve profile user
 	profile_user 	= User.objects.get(username=str(username))
-	# retrieve profile using profile_user object
-	profile 		= UserProfile.objects.get(user=profile_user)
-	# retrieve profile video bookmarks (m2m field defined in UserProfile)
-	video_favorites = profile.video_favorites.all()
-	# retrieve profile playlists (m2m field defined in UserProfile)
-	# playlists 		= profile.playlists.all()
-	# playlists = profile_user.videoplaylist_set.all()
+	# retrieve user profile using profile_user object and User.profile attribute
+	user_profile 	= profile_user.profile
+	# retrieve user profile video bookmarks (m2m field defined in UserProfile)
+	video_favorites = user_profile.video_favorites.all()
+	# retrieve user profile playlists (m2m field defined in UserProfile)
+	video_playlists = user_profile.video_playlists.all()
+
 
 	# templates/accounts/user_profile.html <- accounts template folder is NOT part of django-registration
 	return render_to_response('accounts/user_profile.html', locals())

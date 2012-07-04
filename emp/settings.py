@@ -2,7 +2,6 @@
 import os.path
 
 # HEROKU DEPLOYMENT
-# URL-based db for Heroku
 # import dj_database_url
 # DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
@@ -157,6 +156,10 @@ INSTALLED_APPS = (
 
 # django-registration account activation window
 ACCOUNT_ACTIVATION_DAYS = 60
+
+# tell Django where UserProfile lives for 'user.get_profile()'
+AUTH_PROFILE_MODULE = "accounts.UserProfile"
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

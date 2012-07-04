@@ -15,7 +15,7 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	birthday  = models.DateField(blank=True, null=True)
 
-	website = models.URLField(blank=True, null=True)
+	website = models.URLField(blank=True)
 	premium = models.BooleanField()
 
 	profile_pic = models.FileField(upload_to='profiles/pics/', blank=True, null=True)
@@ -24,10 +24,14 @@ class UserProfile(models.Model):
 	video_playlists = models.ManyToManyField(VideoPlaylist, blank=True, null=True)
 
 	def __unicode__(self):
-		return self.user
+		return u'%s' % (str(self.user),)
 
 	# TODO: Implement these fields when the appropriate models are ready # 
 	"""
 	gallery_favorites = models.ManyToManyField(Gallery)
 	image_favorites   = models.ManyToManyField(Pic)
 	"""
+
+# This either gets a UserProfile or creates a UserProfile automatically based on
+# whether or not the UserProfile already exists
+User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
