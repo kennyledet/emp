@@ -18,8 +18,14 @@
 		  flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.11.swf");
 		</script>
 		<!-- /PLAYER -->
+		{% if user_favorited %}
+			{# todo: implement this link in the favorite_video view - use 'fr' query string to denote a removal #}
+			<a href="/videos/favorite/?fr={{ video.id }}">Remove from Favorites</a>
+		{% else %}
+			<a href="/videos/favorite/?f={{ video.id }}">Add to Favorites</a>
+		{% endif %}			
+	
 
-		<a href="/videos/favorite/?f={{ video.id }}">Add to Favorites</a>
 	{% else %}
 		<h3>Video is still converting</h3>
 		<p>{{ video.title }} is still converting, please refresh later</p>
