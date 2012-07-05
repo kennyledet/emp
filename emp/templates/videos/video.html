@@ -15,6 +15,7 @@
 		   id="player">
 		</a>
 		<!-- /PLAYER -->
+		<br/>		
 		{# Video favoriting/unfavorint AJAXified form #}
 		{# TODO: still show favorite button to guest users, but don't use either of below forms, instead alert or redirect user to signup #}
 		{% if request.user.is_authenticated %}
@@ -104,7 +105,7 @@ $(document).ready(function() {
             		$("#favoriteButton").prop('value', 'Added to Favorites!');
             	} else {
             		$("#favoriteButton").prop('value', 'Removed from Favorites!')
-            	}
+		}
             }
         });
     });
