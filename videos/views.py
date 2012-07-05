@@ -21,7 +21,7 @@ Workflow:
 	Pass video object data to videos/video.html template
 """
 def video(request, video_id, video_title_slug=None):
-	#csrfContext = RequestContext(request)
+	csrfContext = RequestContext(request)
 
 	# retrieve video object by id
 	video    = Video.objects.get(id=video_id)
@@ -37,7 +37,7 @@ def video(request, video_id, video_title_slug=None):
 	else:
 		user_favorited = False
 
-	return render_to_response('videos/video.html', locals())
+	return render_to_response('videos/video.html', locals(), csrfContext)
 
 """
 Handle video uploads here
@@ -49,7 +49,7 @@ Workflow:
 """
 @login_required(login_url='/accounts/login/')
 def video_upload(request):
-	#csrfContext = RequestContext(request)
+	csrfContext = RequestContext(request)
 	# get user/uploader
 	uploader = request.user
 	if request.method == 'POST': # if upload form submitted
@@ -79,7 +79,7 @@ def video_upload(request):
 			return HttpResponseRedirect('/videos/') # redirect user
 	else:
 		upload_form = VideoForm()
-	return render_to_response('videos/video_upload.html', locals())
+	return render_to_response('videos/video_upload.html', locals(), csrfContext)
 
 def video_upload_success(request):
 	return render_to_response('videos/video_upload_success.html')
