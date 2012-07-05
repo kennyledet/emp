@@ -19,14 +19,12 @@
 		{# TODO: still show favorite button to guest users, but don't use either of below forms, instead alert or redirect user to signup #}
 		{% if request.user.is_authenticated %}
 			{% if user_favorited %}
-				<!-- <a href="/videos/favorite/?fr={{ video.id }}">Remove from Favorites</a> -->
 				<form id="favoriteForm" action="/videos/favorite/" method="post">
 					{% csrf_token %}
 					<input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
 					<input id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
 				</form>
 			{% else %}
-				<!-- <a href="/videos/favorite/?f={{ video.id }}">Add to Favorites</a> -->
 				<form id="favoriteForm" action="/videos/favorite/" method="post">
 					{% csrf_token %}
 					<input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
@@ -62,7 +60,11 @@ $(document).ready(function() {
             	'fav_type': $("#favoriteButton").val()
             },
             success: function(data){
-            	alert(data);
+            	if(data == 'Added') {
+            		$("#favoriteButton").prop('value', 'Added!');
+            	} else {
+            		$("#favoriteButton").prop('value', 'Removed!')
+            	}
             }
         });
     });

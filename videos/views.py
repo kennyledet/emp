@@ -23,9 +23,12 @@ Workflow:
 def video(request, video_id, video_title_slug=None):
 	#csrfContext = RequestContext(request)
 
+	# retrieve video object by id
 	video    = Video.objects.get(id=video_id)
-	# check if video is already in user's favorites list
-	if str(request.user) != 'AnonymousUser':
+
+	# if a user is logged in
+	if request.user.is_authenticated:
+		# check if video is already in user's favorites list
 		user_profile = UserProfile.objects.get(user=request.user)
 		if user_profile.video_favorites.filter(title=video.title):
 			user_favorited = True
@@ -123,7 +126,6 @@ def video_playlist(request, playlist_id):
 	return render_to_response('videos/video_playlist.html', locals())
 	
 
-
 """
 AJAXified view - request is sent through favoriteForm through jQuery AJAX with 2 key POST variables:
 1. video_id - The id of the video to be favorited by the current request.user
@@ -131,20 +133,18 @@ AJAXified view - request is sent through favoriteForm through jQuery AJAX with 2
 
 The video either gets added or removed from the UserProfile's video_favorites ManyToMany field
 """
-# @login_required(login_url='/accounts/login/')
 def favorite_video(request):
 	if request.is_ajax():
 		if request.POST['video_id'] and request.POST['fav_type']:
 			video = Video.objects.get(id=request.POST['video_id'])
 			user_profile = request.user.profile
 			
-			message = request.POST['video_id'] + request.POST['fav_type'] + str(request.user)
 			if request.POST['fav_type'] == 'Add to Favorites':
 				user_profile.video_favorites.add(video)
-				return HttpResponse(message)
+				return HttpResponse('Added')
 			elif request.POST['fav_type'] == 'Remove from Favorites':
 				user_profile.video_favorites.remove(video)
-				return HttpResponse(message)
+				return HttpResponse('Removed')
 
 	else:
-		return HttpResponse('test')
+		return HttpResponse('Not AJAX')
