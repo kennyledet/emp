@@ -21,6 +21,8 @@ Workflow:
 	Pass video object data to videos/video.html template
 """
 def video(request, video_id, video_title_slug=None):
+	csrfContext = RequestContext(request)
+
 	video    = Video.objects.get(id=video_id)
 	# check if video is already in user's favorites list
 	user_profile = UserProfile.objects.get(user=request.user)
@@ -29,7 +31,7 @@ def video(request, video_id, video_title_slug=None):
 	else:
 		user_favorited = False
 
-	return render_to_response('videos/video.html', locals())
+	return render_to_response('videos/video.html', locals(), csrfContext)
 
 """
 Handle video uploads here
@@ -124,8 +126,14 @@ def video_playlist(request, playlist_id):
 'fr' - Allows user to remove video from favorites (video gets filtered,deleted from favorites m2m in user profile)
 TODO: Implement this as AJAX on video play page
 """
-@login_required(login_url='/accounts/login/')
+#@login_required(login_url='/accounts/login/')
 def favorite_video(request):
+	if request.is_ajax():
+		message = "Yes"
+	else:
+		message = "No"
+	return HttpResponse(message)
+	"""
 	if 'f' in request.GET:
 		video_id = request.GET['f']
 		if video_id:
@@ -150,5 +158,6 @@ def favorite_video(request):
 			return HttpResponseRedirect(request.META['HTTP_REFERER'])
 	else:
 		return HttpResponseRedirect(request.META['HTTP_REFERER'])
+	"""
 
 

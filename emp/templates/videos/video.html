@@ -14,15 +14,20 @@
 		   style="display:block;width:425px;height:300px;"
 		   id="player">
 		</a>
-		<script language="JavaScript">
-		  flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.11.swf");
-		</script>
 		<!-- /PLAYER -->
 		{% if user_favorited %}
 			{# todo: implement this link in the favorite_video view - use 'fr' query string to denote a removal #}
-			<a href="/videos/favorite/?fr={{ video.id }}">Remove from Favorites</a>
+			<!-- <a href="/videos/favorite/?fr={{ video.id }}">Remove from Favorites</a> -->
+			<form>
+
+			</form>
 		{% else %}
-			<a href="/videos/favorite/?f={{ video.id }}">Add to Favorites</a>
+			<!-- <a href="/videos/favorite/?f={{ video.id }}">Add to Favorites</a> -->
+			<form id="favoriteForm" action="/videos/favorite/" method="post">
+				{% csrf_token %}
+				<input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
+				<input id="favoriteButton" name="favoriteButton" type="submit" value="Add To Favorites"/>
+			</form>
 		{% endif %}			
 	
 
@@ -32,4 +37,49 @@
 	{% endif %}
 
 
+{% endblock %}
+
+{% block extra_javascript %}
+{# Flowplayer js #}
+<script language="JavaScript">
+	flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.11.swf");
+</script>
+{# AJAX code for Add/Remove Favorite video button #}
+<script>
+$(document).ready(function() {
+    $("#favoriteForm").submit(function(event){
+        event.preventDefault();
+        $.ajax({
+            type:"POST",
+            url:"/videos/favorite/",
+            data: {
+            	'video_id': $("#video_id").val(),
+            	'fav_type': $("#favoriteButton").val()
+            },
+            success: function(data){
+            	alert(data);
+            }
+        });
+    });
+    return false;
+});
+/*
+$.ajax({
+  url: '/videos/favorite/',
+  type: 'POST',
+  data: {
+  	param1: 'value1'
+  },
+  complete: function(xhr, textStatus) {
+    //called when complete
+  },
+  success: function(data, textStatus, xhr) {
+    //called when successful
+  },
+  error: function(xhr, textStatus, errorThrown) {
+    //called when there is an error
+  }
+});
+*/
+</script>
 {% endblock %}
