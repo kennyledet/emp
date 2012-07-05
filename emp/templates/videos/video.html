@@ -102,9 +102,9 @@ $(document).ready(function() {
             },
             success: function(data){
             	if(data == 'Added') {
-            		$("#favoriteButton").prop('value', 'Added to Favorites!');
+            		$("#favoriteButton").prop('value', 'Remove from Favorites');
             	} else {
-            		$("#favoriteButton").prop('value', 'Removed from Favorites!')
+            		$("#favoriteButton").prop('value', 'Add to Favorites')
 		}
             }
         });

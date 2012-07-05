@@ -36,7 +36,6 @@ def video(request, video_id, video_title_slug=None):
 			user_favorited = False
 	else:
 		user_favorited = False
-
 	return render_to_response('videos/video.html', locals(), csrfContext)
 
 """
