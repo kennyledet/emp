@@ -29,13 +29,19 @@ def video(request, video_id, video_title_slug=None):
 	# if a user is logged in
 	if request.user.is_authenticated:
 		# check if video is already in user's favorites list
-		user_profile = UserProfile.objects.get(user=request.user)
+		user_profile = request.user.profile
 		if user_profile.video_favorites.filter(title=video.title):
 			user_favorited = True
 		else:
 			user_favorited = False
 	else:
 		user_favorited = False
+
+	tags = video.tags.all()
+
+	# increment video views
+	video.views = video.views + 1
+	video.save()
 	return render_to_response('videos/video.html', locals(), csrfContext)
 
 """
