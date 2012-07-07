@@ -15,7 +15,7 @@ Video play page(s)
 Workflow:
 	Catch the video id in the URL, as well as the video title slug if it exists in the URL
 	  (video title slug in the URL is not required by default and is allowed for convenience for 
-	  	implementing SEO URLs in the future using these slugs!)
+	  	implementing SEO URLs)
 	Use this video ID to get single video object from the database
 
 	Pass video object data to videos/video.html template

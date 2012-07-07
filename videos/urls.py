@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('videos.views',
     url(r'^play/(?P<video_id>\d.*)/$', 'video', name='video'),
+    url(r'^play/(?P<video_id>\d.*)/(?P<video_title_slug>[A-Za-z0-9-].*)$', 'video', name='video'),
+
     url(r'^$', 'videos', name='videos'),
     url(r'^search/$', 'videos_search', name='videos_search'),
     url(r'^upload/$', 'video_upload', name='video_upload'),

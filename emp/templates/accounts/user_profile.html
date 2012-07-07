@@ -18,7 +18,7 @@
 	<h4>Website: <a href="{{ user_profile.website }}">{{ user_profile.website }}</a></h4>
 	<h4>Favorite Videos</h4>
 	{% for video in video_favorites %}
-	  <a href="/videos/play/{{ video.id }}/"><p>{{ video.title }}</p></a>
+	  <a href="/videos/play/{{ video.id }}/{{ video.title_slug }}"><p>{{ video.title }}</p></a>
 	{% endfor %}
 
 	<h4>Playlists</h4>
