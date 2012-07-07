@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 # Import MEDIA_ROOT
 from emp.settings    import MEDIA_ROOT
+# Import UserProfile model for some class methods
 
 
 class Category(models.Model):
@@ -46,6 +47,7 @@ class Video(models.Model):
 	def __unicode__(self):
 		return self.title
 
+	# get list of thumbnail filenames for video
 	def _get_thumbs(self):
 		thumbs_path = MEDIA_ROOT + '/videos/thumbs/'+ str(self.id) +'/'
 		thumbs_list = os.listdir(thumbs_path)
@@ -54,6 +56,13 @@ class Video(models.Model):
 		return thumbs_list
 
 	thumbs_list = property(_get_thumbs)
+
+	# get number of favorites (via the # of user profiles which have the video favorited (m2m relation))
+	def _get_num_favorites(self):
+		favoriters = self.userprofile_set.all()
+		return len(favoriters)
+
+	num_favorites = property(_get_num_favorites)
 
 """
 Each video playlist is owned by a single user who created it.

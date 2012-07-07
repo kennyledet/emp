@@ -12,3 +12,4 @@ opencoreamr
 faad2
 lame
 jpeg
+libmagic

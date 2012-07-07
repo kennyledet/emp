@@ -1,16 +1,19 @@
 import os
 import subprocess
 import json
+import re
+# python-magic, wrapper around libmagic to check file types
+import magic
 
 from   emp.settings  import MEDIA_ROOT
 from   videos.models import Video
 
 """
 Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
-into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails (ffmpegthumbnailer?)
+into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails
 
 Also, update additional Video object model properties down here
-Note: Data is safe to pass into cmds, the necessary data validation is handled further back in the stack
+Note: Data is only considered safe to pass into cmds when the necessary data validation is done via validates_as_video()
 """
 def convert_uploaded_video(video_id):
 	# Retrieve video from db by id
@@ -20,26 +23,27 @@ def convert_uploaded_video(video_id):
 	src_path    = MEDIA_ROOT + '/videos/src/' + video.src_filename
 	dest_path	= MEDIA_ROOT + '/videos/flv/' + str(video_id) + '.flv'
 
-	# Generate video thumbnails from source video (higher quality)
-	generate_video_thumbs(src_path, video_id)
+	## VALIDATE FILE UPLOAD AS VIDEO BEFORE PASSING INTO ANY SHELL CALLS ##
+	if validates_as_video(src_path):
+		# Generate video thumbnails from source video (higher quality)
+		generate_video_thumbs(src_path, video_id)
+		# Get src video codec
+		video.src_vidtype = str(get_video_type(src_path))
+		# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings )
+		ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
+		os.system(ffmpeg_call)
 
-	# Get src video codec
-	video.src_vidtype = str(get_video_type(src_path))
+		# Get and commit additional data of processed video to db #
+		video.length 	      = get_video_length(dest_path)
+		video.vidtype         = str(get_video_type(dest_path))
+		video.converted_file  = dest_path
 
-	# Convert file to .flv using ffmpeg ( very generic for now,should support diff. settings)
-	ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
-	os.system(ffmpeg_call)
-
-	# Delete sauce file
+		video.converted       = True
+		video.save()
+	else: # if validation fails, no need for a non-video to even be a record in the videos database! Remove it.
+		video.delete()
+	# Clean up, remove source file regardless of validation
 	call = subprocess.call(['rm', str(src_path)])
-
-	# Commit additional data of processed video to db #
-	video.length 	      = get_video_length(dest_path)
-	video.vidtype         = str(get_video_type(dest_path,))
-	video.converted_file  = dest_path
-	# video.src_file        = ""
-	video.converted       = True
-	video.save()
 
 """
 Utility function to return the length of a video from ffmpeg output 
@@ -110,3 +114,16 @@ Utility function to create paths (namely, directories) for use in other function
 def create_path(path):
 	if not os.path.isdir(path):
 		os.makedirs(path)
+
+"""
+Utility function to be used to validate whether or not a file is a video, based on the file's mimetype
+"""
+def validates_as_video(path):
+	mime 	 = magic.Magic(mime=True)
+	mimetype = mime.from_file(path)
+	# check if mimetype matches regexp
+	result   = re.match("^video/.*", mime.from_file(path))
+	if result:
+		return True
+	else:
+		return False
