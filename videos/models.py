@@ -20,7 +20,6 @@ class Category(models.Model):
 
 class Video(models.Model):
 	title 		= models.CharField(max_length=255)
-	title_slug  = models.CharField(max_length=255)
 	uploader 	= models.ForeignKey(User, editable=False)
 	upload_datetime   = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
@@ -63,6 +62,14 @@ class Video(models.Model):
 		return len(favoriters)
 
 	num_favorites = property(_get_num_favorites)
+
+	# generate a video title slug based on the video title for use in URLS
+	def _get_video_title_slug(self):
+		title_slug		 = str(self.title).lower()
+		title_slug 		 = title_slug.replace(' ','-')
+		return title_slug
+
+	title_slug = property(_get_video_title_slug)
 
 """
 Each video playlist is owned by a single user who created it.

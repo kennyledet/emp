@@ -68,9 +68,7 @@ def video_upload(request):
 			video.rating	 = 0
 			video.favorites  = 0
 			video.views		 = 0
-			title_slug		 = str(video.title).lower()
-		 	title_slug 		 = title_slug.replace(' ','-')
-			video.title_slug = title_slug
+
 			# Get some basic file info
 			video.src_filename = str(video.src_file.name)
 			video.file_size    = video.src_file.size
