@@ -65,7 +65,6 @@ def video_upload(request):
 			video 			 = upload_form.save(commit=False)
 			video.uploader 	 = uploader
 			video.converted	 = False
-			video.rating	 = 0
 			video.favorites  = 0
 			video.views		 = 0
 
