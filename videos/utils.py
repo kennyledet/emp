@@ -36,6 +36,7 @@ def convert_uploaded_video(video_id):
 		video.vidtype         = str(get_video_type(dest_path))
 		video.converted_file  = dest_path
 		video.converted       = True
+
 		video.save()
 	else: # if validation fails, no need for a non-video to even be a record in the videos database! Remove it.
 		video.delete()

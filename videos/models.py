@@ -1,14 +1,15 @@
+""" Import Python modules """
 import os
+""" Import Django modules """
 from django.db 		 import models
-""" Import settings """
+""" Import Django settings """
 from emp.settings    import MEDIA_ROOT
 """ Import Models """
 from django.contrib.auth.models import User
 """ Import from 3rd party Django modules """
-# django-taggit taggable manager
-from taggit.managers 	  import TaggableManager
-# django-ratings field type
-from djangoratings.fields import RatingField
+from taggit.managers 	  import TaggableManager # django-taggit taggable manager
+from djangoratings.fields import RatingField 	 # django-ratings field type
+
 
 
 class Category(models.Model):
@@ -17,8 +18,6 @@ class Category(models.Model):
 
 	def __unicode__(self):
 		return self.category_title
-
-# TODO: Add model method to calculate hours, minutes, seconds from length 00:00:00.00
 
 class Video(models.Model):
 	title 		= models.CharField(max_length=255)
@@ -46,7 +45,7 @@ class Video(models.Model):
 	def __unicode__(self):
 		return self.title
 
-	# get list of thumbnail filenames for video
+	""" Get list of thumbnail filenames for video """
 	def _get_thumbs(self):
 		thumbs_path = MEDIA_ROOT + '/videos/thumbs/'+ str(self.id) +'/'
 		thumbs_list = os.listdir(thumbs_path)
@@ -56,14 +55,14 @@ class Video(models.Model):
 
 	thumbs_list = property(_get_thumbs)
 
-	# get number of favorites (via the # of user profiles which have the video favorited (m2m relation))
+	""" Get number of favorites (via the # of user profiles which have the video favorited (m2m relation)) """
 	def _get_num_favorites(self):
 		favoriters = self.userprofile_set.all()
 		return len(favoriters)
 
 	num_favorites = property(_get_num_favorites)
 
-	# generate a video title slug based on the video title for use in URLS
+	""" Generate a video title slug based on the video title for use in URLS """
 	def _get_video_title_slug(self):
 		title_slug		 = str(self.title).lower()
 		title_slug 		 = title_slug.replace(' ','-')
@@ -71,7 +70,7 @@ class Video(models.Model):
 
 	title_slug = property(_get_video_title_slug)
 
-	# get hours, minutes, seconds from length field, as a list of integers
+	""" Get hours, minutes, seconds from length field, as a list of integers """
 	def _get_length_list(self):
 		init_length_list = self.length.split(':')
 		hours   = int(init_length_list[0])
@@ -82,7 +81,7 @@ class Video(models.Model):
 
 	length_list = property(_get_length_list)
 
-	# get total seconds (useful when need to order by total length)
+	""" Get total seconds (useful when need to order by total length) """
 	def _get_total_seconds(self):
 		hours   = self.length_list[0]
 		minutes = self.length_list[1]
@@ -95,8 +94,7 @@ class Video(models.Model):
 
 	total_seconds = property(_get_total_seconds)
 
-"""
-Each video playlist is owned by a single user who created it.
+""" Each video playlist is owned by a single user who created it.
 It may be added to a different user's lists of playlists, however:
 Each playlist is immutable, and as such a user may only edit (delete/add videos) a playlist
 by importing a copy of it, therefore becoming the new owner of that particular instance of the playlist
@@ -111,9 +109,6 @@ class VideoPlaylist(models.Model):
 	modified_datetime = models.DateTimeField(auto_now=True)
 
 	created_by = models.ForeignKey(User)
-	
-
-	##added_by = models.ManyToManyField(UserProfile)
 
 	def __unicode__(self):
 		return self.title
