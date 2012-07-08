@@ -1,21 +1,6 @@
 # Django settings for emp project.
 import os.path
 
-# HEROKU DEPLOYMENT
-# import dj_database_url
-# DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
-
-# django-celery settings
-import djcelery
-djcelery.setup_loader()
-BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
-BROKER_HOST = "localhost"
-BROKER_PORT = 5672
-BROKER_USER = "guest"
-BROKER_PASSWORD = "guest"
-BROKER_VHOST = "/"
-
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -152,14 +137,9 @@ INSTALLED_APPS = (
     'djkombu',
     # django-registration
     'registration',
+    # django-ratings
+    'djangoratings',
 )
-
-# django-registration account activation window
-ACCOUNT_ACTIVATION_DAYS = 60
-
-# tell Django where UserProfile lives for 'user.get_profile()'
-AUTH_PROFILE_MODULE = "accounts.UserProfile"
-
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -194,3 +174,26 @@ LOGGING = {
 # start test mail server from terminal - 'python -m smtpd -n -c DebuggingServer localhost:1025'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
+
+# django-celery (asynchronous task queue) settings
+import djcelery
+djcelery.setup_loader()
+BROKER_BACKEND = "djkombu.transport.DatabaseTransport"
+BROKER_HOST = "localhost"
+BROKER_PORT = 5672
+BROKER_USER = "guest"
+BROKER_PASSWORD = "guest"
+BROKER_VHOST = "/"
+
+# django-registration account activation window
+ACCOUNT_ACTIVATION_DAYS = 60
+
+# tell Django where UserProfile lives for 'user.get_profile()'
+AUTH_PROFILE_MODULE = "accounts.UserProfile"
+
+
+# Uncomment the following lines for Heroku deployment
+# import dj_database_url
+# DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+
+

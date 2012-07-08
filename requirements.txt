@@ -9,3 +9,4 @@ django-kombu
 django-registration
 gunicorn
 django-magic
+django-ratings

@@ -35,7 +35,7 @@
     <p>Length: {{ video.length }}</p>
     <p>Description: {{ video.description }}</p>
 
-    <p>Tags: {% for tag in tags %} {{ tag.name }}, {% endfor %}
+    <p>Tags: {% for tag in video_tags %} {{ tag.name }}, {% endfor %}
 
 
 {% endblock %}
@@ -47,6 +47,7 @@ flowplayer("player", "http://releases.flowplayer.org/swf/flowplayer-3.2.11.swf")
 </script>
 
 {# Required for csrf not to break AJAX requests #}
+{# todo: have this imported #}
 <script type="text/javascript">
 jQuery(document).ajaxSend(function(event, xhr, settings) {
     function getCookie(name) {

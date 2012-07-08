@@ -5,4 +5,4 @@ class VideoForm(ModelForm):
 	class Meta:
 		model = Video
 		# pass in tuple of fields to display in upload form
-		fields = ('title','description','categories','tags','nsfw','src_file')
+		fields = ('title','description','categories','tags','src_file')

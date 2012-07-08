@@ -1,12 +1,14 @@
 import os
-from django.db import models
-# Import User model
-from django.contrib.auth.models import User
-# Import django-taggit manager
-from taggit.managers import TaggableManager
-# Import MEDIA_ROOT
+from django.db 		 import models
+""" Import settings """
 from emp.settings    import MEDIA_ROOT
-# Import UserProfile model for some class methods
+""" Import Models """
+from django.contrib.auth.models import User
+""" Import from 3rd party Django modules """
+# django-taggit taggable manager
+from taggit.managers 	  import TaggableManager
+# django-ratings field type
+from djangoratings.fields import RatingField
 
 
 class Category(models.Model):
@@ -26,14 +28,12 @@ class Video(models.Model):
 	length  	= models.CharField(max_length=255, blank=True, editable=False)
 	description = models.TextField()
 	converted   = models.BooleanField(editable=False)
+	views 		= models.IntegerField(editable=True)
 
-	rating_choices = ((u'1',u'1'),(u'2',u'2'),(u'3',u'3'),(u'4',u'4'),(u'5',u'5'),(u'0',u'0'))
-	rating		= models.IntegerField(choices=rating_choices)
 	categories  = models.ManyToManyField(Category)
-	tags 		= TaggableManager(blank=True)
-
-	nsfw		= models.BooleanField()
-	views 		= models.IntegerField()
+	tags 		= TaggableManager(blank=True) # django-taggit handles tagging
+	rating 		= RatingField(range=5) # 5 possible rating choices
+	nsfw		= models.BooleanField() # (Not Safe for Work)
 
 	vidtype		= models.CharField(max_length=255, editable=False)
 	src_vidtype = models.CharField(max_length=255, editable=False)
@@ -71,6 +71,30 @@ class Video(models.Model):
 
 	title_slug = property(_get_video_title_slug)
 
+	# get hours, minutes, seconds from length field, as a list of integers
+	def _get_length_list(self):
+		init_length_list = self.length.split(':')
+		hours   = int(init_length_list[0])
+		minutes = int(init_length_list[1])
+		seconds = int(init_length_list[2].split('.')[0])
+		length_list = [hours, minutes, seconds]
+		return length_list
+
+	length_list = property(_get_length_list)
+
+	# get total seconds (useful when need to order by total length)
+	def _get_total_seconds(self):
+		hours   = self.length_list[0]
+		minutes = self.length_list[1]
+		seconds = self.length_list[2]
+
+		seconds_in_hours   = hours * 60 * 60
+		seconds_in_minutes = minutes * 60
+		total_seconds = seconds_in_hours + seconds_in_minutes + seconds
+		return total_seconds
+
+	total_seconds = property(_get_total_seconds)
+
 """
 Each video playlist is owned by a single user who created it.
 It may be added to a different user's lists of playlists, however:
@@ -89,7 +113,7 @@ class VideoPlaylist(models.Model):
 	created_by = models.ForeignKey(User)
 	
 
-	##added_by = models.ManyToManyField(UserProfile, related_name='++')
+	##added_by = models.ManyToManyField(UserProfile)
 
 	def __unicode__(self):
 		return self.title

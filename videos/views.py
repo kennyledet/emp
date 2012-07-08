@@ -37,7 +37,7 @@ def video(request, video_id, video_title_slug=None):
 	else:
 		user_favorited = False
 
-	tags = video.tags.all()
+	video_tags = video.tags.all()
 
 	# increment video views
 	video.views = video.views + 1
