@@ -24,8 +24,8 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 	video.save()
 
 	video_tags = video.tags.all() # get video's defined tags
-
-	if request.user.is_authenticated: # if a user is logged in
+	user = request.user
+	if user.is_authenticated(): # if a user is logged in
 		user_profile = request.user.profile
 		if user_profile.video_favorites.filter(title=video.title): # if user has already favorited this video
 			user_favorited = True
