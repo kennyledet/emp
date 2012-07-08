@@ -1,7 +1,7 @@
 """ Import Django modules """
+from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts       import render_to_response
 from django.template 		import RequestContext
-from django.http 			import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 
 """ Import Models """
@@ -20,7 +20,7 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 
 	video = Video.objects.get(id=video_id) # retrieve video object by id
 
-	video.views = video.views + 1 # increment video views
+	video.views = video.views + 1 # increment video's # of views
 	video.save()
 
 	video_tags = video.tags.all() # get video's defined tags

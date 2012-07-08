@@ -11,7 +11,6 @@ from taggit.managers 	  import TaggableManager # django-taggit taggable manager
 from djangoratings.fields import RatingField 	 # django-ratings field type
 
 
-
 class Category(models.Model):
 	category_title = models.CharField(max_length=255)
 	nsfw		   = models.BooleanField(blank=True)

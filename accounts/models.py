@@ -1,11 +1,11 @@
+""" Import Django modules """
 from django.db import models
-# Import User model
+""" Import models """
 from django.contrib.auth.models import User
-# Import Video and VideoPlaylist
 from videos.models 				import Video, VideoPlaylist
 
-""" UserProfile model holds additional user data outside of default Django authentication fields and some ForeignKeys (video->uploader)
-Such as: birthdate, video favorites, video playlists, image favorites """
+""" UserProfile model holds additional user data outside of the default Django authentication fields and some ForeignKeys (video->uploader)
+Such as: birthdate, 'premium' status, favorites and playlists """
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User) # required for associating with a single user
