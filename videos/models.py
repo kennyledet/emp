@@ -98,8 +98,7 @@ It may be added to a different user's lists of playlists, however:
 Each playlist is immutable, and as such a user may only edit (delete/add videos) a playlist
 by importing a copy of it, therefore becoming the new owner of that particular instance of the playlist
 TODO: To make the above happen, either have the clone/import happen as soon as the user adds the playlist, 
-	  OR have it happen the first time a user tries to edit that playlist
-"""
+	  OR have it happen the first time a user tries to edit that playlist """
 class VideoPlaylist(models.Model):
 	title  = models.CharField(max_length=255)
 	videos = models.ManyToManyField(Video)

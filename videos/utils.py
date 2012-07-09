@@ -10,8 +10,7 @@ from   videos.models import Video
 into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails
 
 Also, update additional Video object model properties down here
-Note: Data is only considered safe to pass into cmds when the necessary data validation is done via validates_as_video()
-"""
+Note: Data is only considered safe to pass into cmds when the necessary data validation is done via validates_as_video() """
 
 """ Convert an uploaded video """
 def convert_uploaded_video(video_id):
@@ -51,8 +50,7 @@ def get_video_length(path):
 
 """ Return the codec of a video from ffprobe json output
 Utilize this in the future to determine codec of src file for 
-deciding which conversion function to use (diff. srcfiles may have diff. reqs.)
-"""
+deciding which conversion function to use (diff. srcfiles may have diff. reqs.) """
 def get_video_type(path):
 
 	proc = subprocess.Popen("ffprobe -show_format -show_streams -loglevel quiet -print_format json " + path, shell=True, stdout=subprocess.PIPE)

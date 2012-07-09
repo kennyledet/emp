@@ -62,7 +62,7 @@ def video_upload(request):
 			# Pass video id into Celery task ProcessVideoTask for further processing (such as video conversion)
 			ProcessVideoTask.delay(video.id)
 
-			return HttpResponseRedirect('/videos/') # redirect user to video upload success page here
+			return HttpResponseRedirect('/videos/') # should redirect user to video upload success page here
 	else:
 		upload_form = VideoForm()
 
