@@ -31,6 +31,7 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 			user_favorited = True
 		else:
 			user_favorited = False
+		user_playlists = VideoPlaylist.objects.filter(owner=user) # get user's playlists
 	else:
 		user_favorited = False
 
@@ -119,4 +120,21 @@ def favorite_video(request):
 				user_profile.video_favorites.remove(video)
 				return HttpResponse('Removed') # let AJAX caller know the video was removed from favorites
 	else:
+		return HttpResponse('Not Ajax')
+
+""" AJAXified playlist adding/removing video view """
+def add_to_playlist(request):
+	if request.is_ajax():
+		if request.POST['video_id'] and request.POST['playlist_id']:
+			video = Video.objects.get(id=request.POST['video_id']) # get video to add, by id
+			playlist = VideoPlaylist.objects.get(id=request.POST['playlist_id']) # get playlist to add video to
+			
+			if video in playlist.videos.all(): # if the video is already in the playlist
+				return HttpResponse("Exists")  # let AJAX caller know it exists
+			else:
+				playlist.videos.add(video) 	   # if the video was successfully added to the playlist
+				return HttpResponse('Added')   # let AJAX caller know it was added
+	else:
 		return HttpResponse('Not AJAX')
+
+

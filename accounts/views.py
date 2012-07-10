@@ -19,10 +19,10 @@ def user_profile(request, username):
 	profile_user 	= User.objects.get(username=str(username))
 	# retrieve user profile using profile_user object and User.profile attribute
 	user_profile 	= profile_user.profile
-	# retrieve user profile video bookmarks (m2m field defined in UserProfile)
+	# retrieve user profile video favorites (m2m field defined in UserProfile)
 	video_favorites = user_profile.video_favorites.all()
-	# retrieve user profile playlists (m2m field defined in UserProfile)
-	video_playlists = user_profile.video_playlists.all()
+	# retrieve user's owned playlists (foreign key field defined in VideoPlaylist)
+	video_playlists = profile_user.videoplaylist_set.all()
 
 
 	# templates/accounts/user_profile.html <- accounts template folder is NOT part of django-registration

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from videos.models 				import Video, VideoPlaylist
 
 """ UserProfile model holds additional user data outside of the default Django authentication fields and some ForeignKeys (video->uploader)
-Such as: birthdate, 'premium' status, favorites and playlists """
+Such as: birthdate, 'premium' status, favorites """
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User) # required for associating with a single user
@@ -16,7 +16,6 @@ class UserProfile(models.Model):
 	premium = models.BooleanField()
 
 	video_favorites = models.ManyToManyField(Video, blank=True, null=True)
-	video_playlists = models.ManyToManyField(VideoPlaylist, blank=True, null=True)
 
 	# location = 
 	# gender   =

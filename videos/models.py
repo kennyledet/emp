@@ -80,7 +80,7 @@ class Video(models.Model):
 
 	length_list = property(_get_length_list)
 
-	""" Get total seconds (useful when need to order by total length) """
+	""" Get total seconds (useful when need to order by length) """
 	def _get_total_seconds(self):
 		hours   = self.length_list[0]
 		minutes = self.length_list[1]
@@ -96,33 +96,18 @@ class Video(models.Model):
 """ Each video playlist is owned by a single user who created it.
 It may be added to a different user's lists of playlists, however:
 Each playlist is immutable, and as such a user may only edit (delete/add videos) a playlist
-by importing a copy of it, therefore becoming the new owner of that particular instance of the playlist
-TODO: To make the above happen, either have the clone/import happen as soon as the user adds the playlist, 
-	  OR have it happen the first time a user tries to edit that playlist """
+by importing a copy of it, therefore becoming the new owner of that particular instance of the playlist """
 class VideoPlaylist(models.Model):
 	title  = models.CharField(max_length=255)
-	videos = models.ManyToManyField(Video)
+	videos = models.ManyToManyField(Video, blank=True)
 
 	created_datetime  = models.DateTimeField(auto_now_add=True)
 	modified_datetime = models.DateTimeField(auto_now=True)
 
-	created_by = models.ForeignKey(User)
+	owner = models.ForeignKey(User)
 
 	def __unicode__(self):
 		return self.title
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 class HTML5Profiles(models.Model):

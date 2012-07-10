@@ -19,9 +19,20 @@
                   <input id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
                 {% endif %}
 			</form><!-- /AJAX video favoriting/unfavoriting form -->
+            <!-- AJAXified add/remove to playlist form -->
+            <form id="playlistForm" action="/videos/playlist/add/" method="post">
+                <input id="video_id" type="hidden" value="{{ video.id }}"/>
+                <select id="playlist_id">
+                    <option value="new_playlist">New Playlist</option>
+                    {% for playlist in user_playlists %}
+                      <option value="{{ playlist.id }}">{{ playlist.title }}</option>
+                    {% endfor %}
+                </select>
+                <input id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
+            </form>
         {% else %} {# A user isn't logged in #}
             <p><a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!</p>
-        {% endif %} 
+        {% endif %}
 
 	{% else %} {# Video isn't converted yet #}
 		<h3>Video is still converting</h3>
@@ -37,9 +48,7 @@
 
     <p>Tags: {% for tag in video_tags %} {{ tag.name }}, {% endfor %}
 
-
 {% endblock %}
-
 {% block extra_javascript %}
 {# Flowplayer js #}
 <script language="JavaScript">
@@ -86,7 +95,7 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
     }
 });
 </script>
-{# AJAX code for Add/Remove Favorite video button #}
+{# AJAX functions for Add/Remove Favorite video button and Add/Remove to video playlist #}
 <script>
 $(document).ready(function() {
     $("#favoriteForm").submit(function(event){
@@ -103,11 +112,36 @@ $(document).ready(function() {
             		$("#favoriteButton").prop('value', 'Remove from Favorites');
             	} else {
             		$("#favoriteButton").prop('value', 'Add to Favorites')
-		}
+		        }
             }
         });
     });
     return false;
 });
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#playlistForm").submit(function(event){
+        event.preventDefault();
+        $.ajax({
+            type:"POST",
+            url:"/videos/playlist/add/",
+            data: {
+                'video_id': $("#video_id").val(),
+                'playlist_id': $("#playlist_id").val()
+            },
+            success: function(data){
+                if(data == 'Added') {
+                    $("#playlistButton").prop('value', 'Added to Playlist!');
+                } else if(data == 'Exists') {
+                    $("#playlistButton").prop('value', 'Video already in playlist')
+                }
+            }
+        });
+    });
+    return false;
+});
+
+
 </script>
 {% endblock %}
