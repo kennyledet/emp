@@ -13,4 +13,3 @@ class VideoPlaylistForm(ModelForm):
 	class Meta:
 		model = VideoPlaylist
 		fields = ('title',) # maybe allow playlists to relate to categories?
-		

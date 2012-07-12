@@ -2,33 +2,33 @@
 {% block title %}<title>Video Playlist - {{ playlist.title }}</title>{% endblock %}
 
 {% block main_content %}
-	<h4>Video Playlist - {{ playlist.title }}</h4>
-	<hr>
-	<div class="container row-fluid">
+<h3>Video Playlist - {{ playlist.title }}</h3>
+<hr>
+<div class="container row-fluid">
 
-	 	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
-	 		<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
-	 	</div> <!-- /left column - playlist information -->
+	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
+	 	<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
+	</div> <!-- /left column - playlist information -->
 
-		{% for video in playlist_videos %} <!-- right column - playlist videos -->
-			{% if video.converted %}
-				<div class="span2">
-				    <a href="/videos/play{{ video.id }}"><h3>{{ video.title }}</h3></a>
+	{% for video in playlist_videos %} <!-- right column - playlist videos -->
+		{% if video.converted %}
+			<div class="span2">
+				<a href="/videos/play{{ video.id }}"><h3>{{ video.title }}</h3></a>
 
-					<div class="slideshow" width="125">
-					    <div class="slides pics" style="position: relative; ">   
-					      {% for thumb in video.thumbs_list %}                
-					        	<img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}/{{ video.title_slug }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
-					      {% endfor %}
-					    </div>
+				<div class="slideshow" width="125">
+					<div class="slides pics" style="position: relative; ">   
+					    {% for thumb in video.thumbs_list %}                
+					        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}/{{ video.title_slug }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
+					    {% endfor %}
 					</div>
-
-				    <a href="/videos/play/{{ video.id }}/{{ video.title_slug }}">Play</a>
 				</div>
-			{% endif %}
-		{% endfor %} <!-- /right column - playlist videos -->
 
-	</div>
+				<a href="/videos/play/{{ video.id }}/{{ video.title_slug }}">Play</a>
+			</div>
+		{% endif %}
+	{% endfor %} <!-- /right column - playlist videos -->
+
+</div>
 {% endblock %}
 
 {% block extra_javascript %}
