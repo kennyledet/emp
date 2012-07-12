@@ -10,7 +10,7 @@ from accounts.models 		import UserProfile
 from django.contrib.auth.models 	import User
 
 """ Import forms """
-from videos.forms 			import VideoForm
+from videos.forms 			import VideoForm, VideoPlaylistForm
 """ Import tasks """
 from videos.tasks			import ProcessVideoTask
 
@@ -122,7 +122,7 @@ def favorite_video(request):
 	else:
 		return HttpResponse('Not Ajax')
 
-""" AJAXified playlist adding/removing video view """
+""" AJAXified adding/removing video to playlist view """
 def add_to_playlist(request):
 	if request.is_ajax():
 		if request.POST['video_id'] and request.POST['playlist_id']:
@@ -136,5 +136,26 @@ def add_to_playlist(request):
 				return HttpResponse('Added')   # let AJAX caller know it was added
 	else:
 		return HttpResponse('Not AJAX')
+
+""" Video Playlist creation  """
+@login_required(login_url='/accounts/login/') # a user must be logged in to create a playlist
+def create_video_playlist(request):
+	if request.is_ajax(): 
+		pass
+	else: # if the request isn't AJAX, just display/process a simple form for playlist creation
+		if request.method == 'POST': # if form is submitted and isn't AJAX
+			# validate the form
+			create_video_playlist_form = VideoPlaylistForm(request.POST)
+			if create_video_playlist_form.is_valid():
+				new_video_playlist = create_video_playlist_form.save(commit=False)
+				new_video_playlist.owner = request.user # set the current user as the owner
+				new_video_playlist.save()
+				return HttpResponseRedirect('/profiles/'+str(request.user)+'/') # redirect user to their profile
+		else: # display the form
+			create_video_playlist_form = VideoPlaylistForm()
+			csrfContext = RequestContext(request)
+			return render_to_response('videos/create_video_playlist.html', locals(), csrfContext)
+
+
 
 

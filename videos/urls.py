@@ -11,6 +11,7 @@ urlpatterns = patterns('videos.views',
     url(r'^playlist/(?P<playlist_id>\d+)/$', 'video_playlist'),
     url(r'^playlist/(?P<playlist_id>\d+)/(?P<playlist_title_slug>[-\w]+)/$', 'video_playlist'),
     url(r'^playlist/add/$', 'add_to_playlist'),
+    url(r'^playlist/create/$', 'create_video_playlist'),
     url(r'^favorite/$', 'favorite_video'),
     
     # url(r'^categories/$', 'videos.views.categories' name='categories'),
