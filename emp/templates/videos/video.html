@@ -184,6 +184,11 @@ $(document).ready(function() {
             }
         });
     });
+    // make sure the add to playlist button reverts to 'Add to Playlist' on option changes
+    $('#playlist_id').change(function(event){
+        event.preventDefault();
+        $("#playlistButton").prop('value', 'Add to Playlist');
+    });
     return false;
 });
 
