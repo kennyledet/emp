@@ -1,53 +1,56 @@
 {% extends "base.html" %}
 {% block title %}<title>{{ video.title }}</title>{% endblock %}
 {% block main_content %}
+    <div class="row-fluid">
+    	<h1>{{ video.title }}</h1>
+    	<hr>
+        <div class="span6">
+    	{% if video.converted %} {# If video is converted #}
+    		<!-- PLAYER -->
+    		<a href="http://127.0.0.1:8000/media/videos/flv/{{ video.id }}.flv" style="display:block;width:425px;height:300px;" id="player">
+            </a><!-- /PLAYER -->
+    		{% if request.user.is_authenticated %} {# If user is logged in #}
+                <!-- AJAXified video favoriting/unfavoriting form -->
+    			<form id="favoriteForm" action="/videos/favorite/" method="post">
+    				{% csrf_token %}
+    				  <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
+                    {% if user_favorited %}
+    				  <input id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
+                    {% else %}
+                      <input id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
+                    {% endif %}
+    			</form><!-- /AJAX video favoriting/unfavoriting form -->
+                <!-- AJAXified add/remove to playlist form -->
+                <form id="playlistForm" action="/videos/playlist/add/" method="post">
+                    <input id="video_id" type="hidden" value="{{ video.id }}"/>
+                    <select id="playlist_id">
+                        <option value="new_playlist">New Playlist</option>
+                        {% for playlist in user_playlists %}
+                          <option value="{{ playlist.id }}">{{ playlist.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <input id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
+                </form>
+            {% else %} {# A user isn't logged in #}
+                <p><a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!</p>
+            {% endif %}
 
-	<h1>{{ video.title }}</h1>
-	<hr>
-	{% if video.converted %} {# If video is converted #}
-		<!-- PLAYER -->
-		<a href="http://127.0.0.1:8000/media/videos/flv/{{ video.id }}.flv" style="display:block;width:425px;height:300px;" id="player">
-        </a><!-- /PLAYER -->
-		{% if request.user.is_authenticated %} {# If user is logged in #}
-            <!-- AJAXified video favoriting/unfavoriting form -->
-			<form id="favoriteForm" action="/videos/favorite/" method="post">
-				{% csrf_token %}
-				  <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
-                {% if user_favorited %}
-				  <input id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
-                {% else %}
-                  <input id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
-                {% endif %}
-			</form><!-- /AJAX video favoriting/unfavoriting form -->
-            <!-- AJAXified add/remove to playlist form -->
-            <form id="playlistForm" action="/videos/playlist/add/" method="post">
-                <input id="video_id" type="hidden" value="{{ video.id }}"/>
-                <select id="playlist_id">
-                    <option value="new_playlist">New Playlist</option>
-                    {% for playlist in user_playlists %}
-                      <option value="{{ playlist.id }}">{{ playlist.title }}</option>
-                    {% endfor %}
-                </select>
-                <input id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
-            </form>
-        {% else %} {# A user isn't logged in #}
-            <p><a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!</p>
-        {% endif %}
+    	{% else %} {# Video isn't converted yet #}
+    		<h3>Video is still converting</h3>
+    		<p>{{ video.title }} is still converting, please refresh later</p>
+    	{% endif %}
+        </div>
 
-	{% else %} {# Video isn't converted yet #}
-		<h3>Video is still converting</h3>
-		<p>{{ video.title }} is still converting, please refresh later</p>
-	{% endif %}
-
-    <!-- Video information -->
-    <p>Uploaded by <a href="/profiles/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</p>
-    <p>Views: {{ video.views }}</p>
-    <p>Favorited by: {{ video.num_favorites }}</p>
-    <p>Length: {{ video.length }}</p>
-    <p>Description: {{ video.description }}</p>
-
-    <p>Tags: {% for tag in video_tags %} {{ tag.name }}, {% endfor %}
-
+        <!-- Video information -->
+        <div class="span4">
+            <p>Uploaded by <a href="/profiles/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</p>
+            <p>Views: {{ video.views }}</p>
+            <p>Favorited by: {{ video.num_favorites }}</p>
+            <p>Length: {{ video.length }}</p>
+            <p>Description: {{ video.description }}</p>
+            <p>Tags: {% for tag in video_tags %} {{ tag.name }}, {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 {% block extra_javascript %}
 {# Flowplayer js #}
