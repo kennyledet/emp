@@ -23,7 +23,7 @@
 
 	<h4>Playlists</h4>
 	{% for playlist in video_playlists %}
-	  <a href="/videos/playlist/{{ playlist.id }}"><p>{{ playlist.title }}</p></a>
+	  <a href="/videos/playlist/{{ playlist.id }}/{{ playlist.title_slug }}"><p>{{ playlist.title }}</p></a>
 	{% endfor %}
 
 {% endblock %}

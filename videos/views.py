@@ -96,7 +96,7 @@ def videos_search(request):
 
 
 """ Video playlist page view """
-def video_playlist(request, playlist_id):
+def video_playlist(request, playlist_id, playlist_title_slug=None):
 	playlist = VideoPlaylist.objects.get(id=playlist_id) # get playlist by id
 	playlist_videos = playlist.videos.all() # retrieve list of playlist's videos
 

@@ -109,6 +109,14 @@ class VideoPlaylist(models.Model):
 	def __unicode__(self):
 		return self.title
 
+	""" Generate a playlist title slug based on the playlist title for use in URLS """
+	def _get_playlist_title_slug(self):
+		title_slug		 = str(self.title).lower()
+		title_slug 		 = title_slug.replace(' ','-')
+		return title_slug
+
+	title_slug = property(_get_playlist_title_slug)
+
 """
 class HTML5Profiles(models.Model):
 	title  = models.CharField(max_length=255)
