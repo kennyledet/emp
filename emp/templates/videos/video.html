@@ -15,11 +15,12 @@
     				{% csrf_token %}
     				  <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
                     {% if user_favorited %}
-    				  <input id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
+    				  <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
                     {% else %}
-                      <input id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
+                      <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
                     {% endif %}
     			</form><!-- /AJAX video favoriting/unfavoriting form -->
+
                 <!-- AJAXified add/remove to playlist form -->
                 <form id="playlistForm" action="/videos/playlist/add/" method="post">
                     <input id="video_id" type="hidden" value="{{ video.id }}"/>
@@ -29,8 +30,26 @@
                           <option value="{{ playlist.id }}">{{ playlist.title }}</option>
                         {% endfor %}
                     </select>
-                    <input id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
-                </form>
+                    <input class="btn-primary" id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
+                </form> <!-- /AJAXified add/remove to playlist form -->
+                <!-- new video playlist modal - AJAXified form -->
+                <div class="modal hide" id="createPlaylistModal">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">×</button>
+                        <h3>Create new video playlist</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form id="createPlaylistForm" action="/videos/playlist/create/" method="POST">
+                            {% csrf_token %}
+                            {{ create_video_playlist_form.as_p }}
+                            <input class="btn" type="submit" value="Create"/>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn" data-dismiss="modal">Close</a>
+                    </div>
+                </div> <!-- /new video playlist modal -->
+
             {% else %} {# A user isn't logged in #}
                 <p><a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!</p>
             {% endif %}
@@ -49,7 +68,8 @@
             <p>Length: {{ video.length }}</p>
             <p>Description: {{ video.description }}</p>
             <p>Tags: {% for tag in video_tags %} {{ tag.name }}, {% endfor %}
-        </div>
+        </div> <!-- /Video information -->
+
     </div>
 {% endblock %}
 {% block extra_javascript %}
@@ -126,18 +146,40 @@ $(document).ready(function() {
 $(document).ready(function() {
     $("#playlistForm").submit(function(event){
         event.preventDefault();
+        // if the user wants to create a new playlist
+        if ( $('#playlist_id').val() == 'new_playlist' ) {
+            $('#createPlaylistModal').modal('show');
+        } else {
+            $.ajax({
+                type:"POST",
+                url:"/videos/playlist/add/",
+                data: {
+                    'video_id': $("#video_id").val(),
+                    'playlist_id': $("#playlist_id").val()
+                },
+                success: function(data){
+                    if(data == 'Added') {
+                        $("#playlistButton").prop('value', 'Added to Playlist!');
+                    } else if(data == 'Exists') {
+                        $("#playlistButton").prop('value', 'Video already in playlist')
+                    }
+                }
+            });
+        }
+
+    });
+    $("#createPlaylistForm").submit(function(event){
+        event.preventDefault();
         $.ajax({
             type:"POST",
-            url:"/videos/playlist/add/",
+            url:"/videos/playlist/create/",
             data: {
-                'video_id': $("#video_id").val(),
-                'playlist_id': $("#playlist_id").val()
+                'title': $('#createPlaylistForm #id_title').val(),
             },
             success: function(data){
-                if(data == 'Added') {
-                    $("#playlistButton").prop('value', 'Added to Playlist!');
-                } else if(data == 'Exists') {
-                    $("#playlistButton").prop('value', 'Video already in playlist')
+                if(data) {
+                    $('#createPlaylistModal').modal('hide');
+                    $('#playlist_id').append(data);
                 }
             }
         });
@@ -145,6 +187,6 @@ $(document).ready(function() {
     return false;
 });
 
-
 </script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 {% endblock %}

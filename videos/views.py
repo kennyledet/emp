@@ -35,6 +35,7 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 	else:
 		user_favorited = False
 
+	create_video_playlist_form = VideoPlaylistForm()
 	csrfContext = RequestContext(request) # necessary to make Django's CSRF protection middleware happy
 	return render_to_response('videos/video.html', locals(), csrfContext)
 
@@ -140,8 +141,12 @@ def add_to_playlist(request):
 """ Video Playlist creation  """
 @login_required(login_url='/accounts/login/') # a user must be logged in to create a playlist
 def create_video_playlist(request):
-	if request.is_ajax(): 
-		pass
+	if request.is_ajax():
+		new_video_playlist_title = request.POST['title'] # get title for creating new playlist
+		new_video_playlist       = VideoPlaylist(title=new_video_playlist_title, owner=request.user) #create it
+		new_video_playlist.save()
+		# construct the new #playlist_id select field option for jQuery to append, preselect it.
+		return HttpResponse('<option value="%s" selected="selected">%s</option>' % (str(new_video_playlist.id), new_video_playlist_title))
 	else: # if the request isn't AJAX, just display/process a simple form for playlist creation
 		if request.method == 'POST': # if form is submitted and isn't AJAX
 			# validate the form
