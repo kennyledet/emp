@@ -8,12 +8,27 @@
 
 	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
 	 	<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
+	 	{% ifequal playlist.owner request.user %}
+	 		<p>This is your playlist</p>
+	 	{% else %} {# allow users to import other users' playlists #}
+	 		<a id="importPlaylistButton" class="btn-small btn-primary" href="#">Import this playlist</a>
+	 		<form id="importPlaylistForm" action="/videos/playlist/import/" method="post">
+	 			{% csrf_token %}
+	 			<input type="hidden" id="playlistID" value="{{ playlist.id }}">
+	 			<input type="text" id="playlistTitle" value="{{ playlist.title }}"/>
+	 			<input class="btn-primary" type="submit" value="Import"> 
+	 		</form>
+	 		<div id="importPlaylistSuccess" class="alert alert-success">
+	 			<p><b>You have successfully imported this playlist as your own!</b> You may now add/remove videos from this playlist at your leisure, as you now own a copy of it.</p>
+	 		</div>
+	 	{% endifequal %}
+
 	</div> <!-- /left column - playlist information -->
 
 	{% for video in playlist_videos %} <!-- right column - playlist videos -->
 		{% if video.converted %}
 			<div class="span2">
-				<a href="/videos/play{{ video.id }}"><h3>{{ video.title }}</h3></a>
+				<a href="/videos/play/{{ video.id }}"><h3>{{ video.title }}</h3></a>
 
 				<div class="slideshow" width="125">
 					<div class="slides pics" style="position: relative; ">   
@@ -32,6 +47,47 @@
 {% endblock %}
 
 {% block extra_javascript %}
+{# Required for csrf middleware not to break AJAX requests #}
+{# todo: have this imported #}
+<script type="text/javascript">
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+</script>
+
 {# jquery cycle - video thumbnail cycling #}
 	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
 	<script type="text/javascript">
@@ -55,4 +111,35 @@
 	    }).css('cursor', 'pointer');
 
 	</script>
+
+{# Import playlist - js #}
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#importPlaylistForm').hide();  // hide the playlist import form on page load
+	$('#importPlaylistSuccess').hide();
+	$('#importPlaylistButton').click(function(event) {
+		event.preventDefault();
+		$('#importPlaylistButton').hide(); // hide playlist import button
+		$('#importPlaylistForm').show();  // show playlist import form
+	});
+	$('#importPlaylistForm').submit(function(event) {
+		event.preventDefault();
+		$.ajax({
+			type: 'POST',
+			url:  '/videos/playlist/import/',
+			data: {
+				'title': $('#importPlaylistForm #playlistTitle').val(),
+				'playlist_id': $('#importPlaylistForm #playlistID').val()
+			},
+			success: function(data) {
+				if(data == 'Imported') {
+					//$('#importPlaylistForm').hide();
+					$('#importPlaylistForm').hide();
+					$('#importPlaylistSuccess').show();
+				}
+			}
+		});
+	});
+});
+</script>
 {% endblock %}

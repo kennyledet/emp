@@ -100,8 +100,8 @@ def videos_search(request):
 def video_playlist(request, playlist_id, playlist_title_slug=None):
 	playlist = VideoPlaylist.objects.get(id=playlist_id) # get playlist by id
 	playlist_videos = playlist.videos.all() # retrieve list of playlist's videos
-
-	return render_to_response('videos/video_playlist.html', locals())
+	csrfContext = RequestContext(request)
+	return render_to_response('videos/video_playlist.html', locals(), csrfContext)
 	
 
 """ AJAXified favoriting view """
@@ -162,5 +162,26 @@ def create_video_playlist(request):
 			return render_to_response('videos/create_video_playlist.html', locals(), csrfContext)
 
 
+""" Video Playlist Importation """
+def import_playlist(request):
+	if request.is_ajax():
+		playlist_id = request.POST['playlist_id']
+		new_title   = request.POST['title']
 
-
+		# retrieve original playlist for model object copying
+		playlist = VideoPlaylist.objects.get(id=playlist_id)
+		# retrieve playlist videos many2many field to copy into new playlist
+		playlist_videos = playlist.videos.all()
+		# set primary key to None, then save, to create a new copy
+		playlist.pk = None
+		playlist.save()
+		# set the new title and the current user as the owner of the new playlist
+		playlist.title = new_title
+		playlist.owner = request.user
+		# copy videos to new playlist
+		playlist.videos = playlist_videos
+		playlist.save()
+		
+		return HttpResponse('Imported')
+	else:
+		pass

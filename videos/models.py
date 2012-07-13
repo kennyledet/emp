@@ -65,6 +65,7 @@ class Video(models.Model):
 	def _get_video_title_slug(self):
 		title_slug		 = str(self.title).lower()
 		title_slug 		 = title_slug.replace(' ','-')
+		title_slug 		 = title_slug.replace('\'','')
 		return title_slug
 
 	title_slug = property(_get_video_title_slug)
@@ -113,6 +114,7 @@ class VideoPlaylist(models.Model):
 	def _get_playlist_title_slug(self):
 		title_slug		 = str(self.title).lower()
 		title_slug 		 = title_slug.replace(' ','-')
+		title_slug 		 = title_slug.replace('\'','')
 		return title_slug
 
 	title_slug = property(_get_playlist_title_slug)
