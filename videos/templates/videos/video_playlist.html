@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}<title>Video Playlist - {{ playlist.title }}</title>{% endblock %}
+
+{% block main_content %}
+<h3>Video Playlist - {{ playlist.title }}</h3>
+<hr>
+<div class="container row-fluid">
+
+	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
+	 	<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
+	</div> <!-- /left column - playlist information -->
+
+	{% for video in playlist_videos %} <!-- right column - playlist videos -->
+		{% if video.converted %}
+			<div class="span2">
+				<a href="/videos/play{{ video.id }}"><h3>{{ video.title }}</h3></a>
+
+				<div class="slideshow" width="125">
+					<div class="slides pics" style="position: relative; ">   
+					    {% for thumb in video.thumbs_list %}                
+					        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}/{{ video.title_slug }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
+					    {% endfor %}
+					</div>
+				</div>
+
+				<a href="/videos/play/{{ video.id }}/{{ video.title_slug }}">Play</a>
+			</div>
+		{% endif %}
+	{% endfor %} <!-- /right column - playlist videos -->
+
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{# jquery cycle - video thumbnail cycling #}
+	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
+	<script type="text/javascript">
+	$(".slideshow").each(function() {
+	    $(this).find(".slides").cycle({
+	        fx:     'fade',
+	        speed:   .3,
+	        timeout: 280,
+	        next:   '#next',
+	        prev:   '#prev'
+	    }).cycle("pause").end().hover(
+	        function() { $(this).find('.slides').cycle('resume'); },
+	        function() { $(this).find('.slides').cycle('pause'); }
+	    );
+	});
+	</script>
+{# enable relative video link (on click) to video thumbnail slideshow #}
+	<script type="text/javascript">
+	   jQuery('.slides img').click(function (){
+	      document.location.href = jQuery(this).attr('rel');
+	    }).css('cursor', 'pointer');
+
+	</script>
+{% endblock %}
