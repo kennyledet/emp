@@ -92,7 +92,7 @@ def videos_search(request):
 			videos = Video.objects.filter(title__icontains=query) # get videos from non-case sensitive search on title column
 			return render_to_response('videos/search.html', locals())
 
-	# If no query entered or query string is empty, display search form with appropriate error msg
+	# If no query entered or query string is empty, display search form with appropriate msg
 	return render_to_response('videos/search_form.html', locals())
 
 

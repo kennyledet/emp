@@ -1,35 +1,31 @@
 {% extends "base.html" %}
-{% block title %}
-	<title>Search Results</title>
-{% endblock %}
+{% block title %}<title>Search Results</title>{% endblock %}
 
 {% block main_content %}
-  <div class="container">
+
+<div class="container">
 
 	{% if query != '' %}
-	  <p>Found {{ videos|length }} video{{ videos|pluralize }} for: {{ query }}</p>
-
-      {% for video in videos %}
+    <div class="alert alert-success">
+	    <p><b>Found {{ videos|length }} video{{ videos|pluralize }} for:</b> {{ query }}</p>
+    </div>
+    {% for video in videos %}
       {% if video.converted %}
-      <div class="span2">
-          <h3>{{ video.title }}</h3>
-
-        <div class="slideshow" width="125">
+        <div class="span2">
+          <div class="slideshow" width="125">
             <div class="slides pics" style="position: relative; ">   
               {% for thumb in video.thumbs_list %}                
-                  <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
+                <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
               {% endfor %}
             </div>
+          </div>
+          <a href="/videos/play/{{ video.id }}/"><h4>{{ video.title }}</h4></a>
         </div>
-
-          <a href="/videos/play/{{ video.id }}">Play</a>
-      </div>
       {% endif %}
-      {% endfor %}
-
+    {% endfor %}
 	{% endif %}
 
-  </div>
+</div>
 {% endblock %}
 
 
