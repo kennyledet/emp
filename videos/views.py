@@ -184,4 +184,4 @@ def import_playlist(request):
 		
 		return HttpResponse('Imported')
 	else:
-		pass
+		return HttpResponse('Not AJAX')	

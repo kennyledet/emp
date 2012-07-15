@@ -68,18 +68,24 @@ def get_video_type(path):
 	return codec
 
 """ Generate video thumbnails and save them to /media/videos/thumbs/*video_id*/ """
+# the # of thumbnails generated will either be equal to the default num_thumbs variable, 
+# OR be equal to the approximate length of the video, in seconds 
+# IF the # of thumbnails specified is indeed greater than the length of the video, in seconds.
 def generate_video_thumbs(path, video):
+	num_thumbs = 10
 	dest_path	  = MEDIA_ROOT + '/videos/thumbs/'+ str(video.id) +'/'
 	create_path(dest_path)
 
 	total_seconds = video.total_seconds
 	frame = 1
-	if total_seconds < 10:
+
+	if total_seconds < num_thumbs:
 		step = 1
+		num_thumbs = total_seconds+1
 	else:
-		step = total_seconds / 10
+		step = total_seconds / num_thumbs
 		
-	for i in range(10):
+	for i in range(num_thumbs):
 		os.system("ffmpeg -ss "+ str(frame) +" -i "+ path +" -vframes 1 -f image2 -s 125x125 "+dest_path + str(i)+".jpg")
 		frame = frame + step
 
