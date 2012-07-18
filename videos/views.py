@@ -185,3 +185,11 @@ def import_playlist(request):
 		return HttpResponse('Imported')
 	else:
 		return HttpResponse('Not AJAX')	
+
+""" Video categories/category views """
+
+def video_categories(request):
+	pass
+
+def video_category(request):
+	pass

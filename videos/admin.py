@@ -1,5 +1,5 @@
 from django.contrib import admin
-from videos.models  import Video, Category, VideoPlaylist
+from videos.models  import Video, VideoCategory, VideoPlaylist
 
 class VideoAdmin(admin.ModelAdmin):
 	list_display   = ('title', 'uploader', 'upload_datetime', 'length', 'views', 'vidtype', 'src_vidtype')
@@ -9,5 +9,5 @@ class VideoAdmin(admin.ModelAdmin):
 	date_hierarchy = 'upload_datetime'
 
 admin.site.register(Video, VideoAdmin)
-admin.site.register(Category)
+admin.site.register(VideoCategory)
 admin.site.register(VideoPlaylist)

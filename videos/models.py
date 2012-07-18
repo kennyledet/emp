@@ -11,12 +11,13 @@ from taggit.managers 	  import TaggableManager # django-taggit taggable manager
 from djangoratings.fields import RatingField 	 # django-ratings field type
 
 
-class Category(models.Model):
-	category_title = models.CharField(max_length=255)
-	nsfw		   = models.BooleanField(blank=True)
+class VideoCategory(models.Model):
+	title = models.CharField(max_length=255)
+	nsfw  = models.BooleanField(blank=True)
+	thumbnail = models.ImageField(upload_to="/videos/categories/thumbs/")
 
 	def __unicode__(self):
-		return self.category_title
+		return self.title
 
 class Video(models.Model):
 	title 		= models.CharField(max_length=255)
@@ -28,7 +29,7 @@ class Video(models.Model):
 	converted   = models.BooleanField(editable=False)
 	views 		= models.IntegerField(editable=True)
 
-	categories  = models.ManyToManyField(Category)
+	categories  = models.ManyToManyField(VideoCategory)
 	tags 		= TaggableManager(blank=True) # django-taggit handles tagging
 	rating 		= RatingField(range=5) # 5 possible rating choices
 	nsfw		= models.BooleanField() # (Not Safe for Work)
