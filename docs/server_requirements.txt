@@ -1,0 +1,21 @@
+Video Conversion Requirements
+========================
+latest version of ffmpeg configured properly (supporting the codecs below)
+
+libx264
+libvpx
+theora
+libvorbis
+libogg
+xvid
+mad
+faac
+opencoreamr
+faad2
+lame
+
+General Requirements
+========================
+jpeg
+libmagic
+celery

@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}<title>Video Playlist - {{ playlist.title }}</title>{% endblock %}
+
+{% block main_content %}
+
+<div class="container">
+	<div class="span12"><h3>Video Playlist - {{ playlist.title }}</h3><hr/></div>
+	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
+	 	<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
+	 	{% ifequal playlist.owner request.user %}
+	 		<p>This is your playlist</p><br/>
+	 	{% else %} {# allow users to import other users' playlists #}
+	 		<a id="importPlaylistButton" class="btn-small btn-primary" href="#">Import this playlist</a>
+	 		<form id="importPlaylistForm" action="/videos/playlist/import/" method="post">
+	 			{% csrf_token %}
+	 			<input type="hidden" id="playlistID" value="{{ playlist.id }}">
+	 			<input type="text" id="playlistTitle" value="{{ playlist.title }}"/>
+	 			<input class="btn-primary" type="submit" value="Import"> 
+	 		</form><br/>
+	 		<div id="importPlaylistSuccess" class="alert alert-success">
+	 			<a class="close" data-dismiss="alert" href="#">&times;</a>
+	 			<p><b>You have successfully imported this playlist as your own!</b> You may now add/remove videos from this playlist at your leisure, as you now own a copy of it.</p>
+	 		</div>
+	 	{% endifequal %}
+	</div> <!-- /left column - playlist information -->
+
+	{% for video in playlist_videos %} <!-- right column - playlist videos -->
+		{% if video.converted %}
+			<div class="span2">
+				<div class="slideshow" width="125">
+					<div class="slides pics" style="position: relative; ">   
+					    {% for thumb in video.thumbs_list %}                
+					        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}/{{ video.title_slug }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
+					    {% endfor %}
+					</div>
+				</div>
+				<a href="/videos/play/{{ video.id }}/"><h4>{{ video.title }}</h4></a>
+			</div>
+		{% endif %}
+	{% endfor %} <!-- /right column - playlist videos -->
+</div>
+{% endblock %}
+
+{% block extra_javascript %}
+{# Required for csrf middleware not to break AJAX requests #}
+{# todo: have this imported #}
+<script type="text/javascript">
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+</script>
+
+{# jquery cycle - video thumbnail cycling #}
+	<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
+	<script type="text/javascript">
+	$(".slideshow").each(function() {
+	    $(this).find(".slides").cycle({
+	        fx:     'fade',
+	        speed:   .3,
+	        timeout: 280,
+	        next:   '#next',
+	        prev:   '#prev'
+	    }).cycle("pause").end().hover(
+	        function() { $(this).find('.slides').cycle('resume'); },
+	        function() { $(this).find('.slides').cycle('pause'); }
+	    );
+	});
+	</script>
+{# enable relative video link (on click) to video thumbnail slideshow #}
+	<script type="text/javascript">
+	   jQuery('.slides img').click(function (){
+	      document.location.href = jQuery(this).attr('rel');
+	    }).css('cursor', 'pointer');
+
+	</script>
+
+{# Import playlist - js #}
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#importPlaylistForm').hide();  // hide the playlist import form on page load
+	$('#importPlaylistSuccess').hide();
+	$('#importPlaylistButton').click(function(event) {
+		event.preventDefault();
+		$('#importPlaylistButton').hide(); // hide playlist import button
+		$('#importPlaylistForm').show();  // show playlist import form
+	});
+	$('#importPlaylistForm').submit(function(event) {
+		event.preventDefault();
+		$.ajax({
+			type: 'POST',
+			url:  '/videos/playlist/import/',
+			data: {
+				'title': $('#importPlaylistForm #playlistTitle').val(),
+				'playlist_id': $('#importPlaylistForm #playlistID').val()
+			},
+			success: function(data) {
+				if(data == 'Imported') {
+					//$('#importPlaylistForm').hide();
+					$('#importPlaylistForm').hide();
+					$('#importPlaylistSuccess').show();
+				}
+			}
+		});
+	});
+});
+</script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-alert.jsytytrftfft"></script>
+{% endblock %}

@@ -1,0 +1,15 @@
+venv
+*.pyc
+*.db
+*.mp4
+*.flv
+*.avi
+*.swp
+*.wmv
+todo.txt
+old_code.txt
+old_code.py
+distribute-0.6.15.tar.gz
+*.png
+*.gif
+*.jpg

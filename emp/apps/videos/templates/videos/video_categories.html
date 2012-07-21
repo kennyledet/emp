@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}<title>Video Categories</title>{% endblock %}
+
+{% block main_content %}
+
+<div class="container" id="cats_container">
+{% for category in category_list %}
+	<div class="span3">
+		<a href="/videos/category/{{ category.id }}/"><h4>{{ category.title }} {% if category.nsfw %}<span class="label label-important">NSFW</span>{% endif %}</h4></a>
+		<a href="/videos/category/{{ category.id }}/"><img width="150px" height="150px" src="/media/{{ category.thumbnail }}"/></a>
+	</div>
+{% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_javascript %}
+
+
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}<title>Search Videos</title>{% endblock %}
+
+{% block main_content %}
+
+<div class="container">
+	<div class="alert">
+		<p><b>Please enter a search query!</b></p>
+	</div>
+
+	<form action = "" method="get"> <!-- search form -->
+		<input type="text" name="q">
+		<input class="btn btn-primary" type="submit" value="Search"> 
+	</form> <!-- / search form -->
+</div>
+
+{% endblock %}
