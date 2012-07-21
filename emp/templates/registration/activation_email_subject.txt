@@ -1,1 +1,0 @@
-Activate your account at {{ site }} (please do it within {{ expiration_days }} days)
