@@ -30,12 +30,12 @@ class Video(models.Model):
 	views 		= models.IntegerField(editable=True)
 
 	categories  = models.ManyToManyField(VideoCategory)
-	tags 		= TaggableManager(blank=True) # django-taggit handles tagging
-	rating 		= RatingField(range=5) # 5 possible rating choices
-	nsfw		= models.BooleanField() # (Not Safe for Work)
+	tags 		= TaggableManager(blank=True)  # django-taggit handles tagging
+	rating 		= RatingField(range=5)   # 5 possible rating choices
+	nsfw		= models.BooleanField()  # (Not Safe for Work)
 
-	vidtype		= models.CharField(max_length=255, editable=False)
-	src_vidtype = models.CharField(max_length=255, editable=False)
+	codec		= models.CharField(max_length=255, editable=False)
+	src_codec   = models.CharField(max_length=255, editable=False)
 	file_size       = models.IntegerField(blank=True, null=True, editable=False)
 	src_file        = models.FileField(upload_to="videos/src/")
 	src_filename    = models.CharField(max_length=255, editable=False)

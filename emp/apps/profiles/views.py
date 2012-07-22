@@ -26,4 +26,4 @@ def user_profile(request, username):
 
 
 	# templates/accounts/user_profile.html <- accounts template folder is NOT part of django-registration
-	return render_to_response('accounts/user_profile.html', locals())
+	return render_to_response('profiles/user_profile.html', locals())

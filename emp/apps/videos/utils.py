@@ -4,7 +4,7 @@ from   emp.settings  import MEDIA_ROOT
 from   emp.apps.videos.models import Video
 
 """ Utility functions to pass uploaded video data into ffmpeg/mencoder to be converted, as well as
-into the utilities necessary to inject metadata (yamdi, flvtool2) and generate thumbnails
+into the utilities necessary to inject metadata (yamdi/flvtool2) and generate thumbnails
 
 Also, update additional Video object model properties down here
 Note: Data is only considered safe to pass into cmds when the necessary data validation is done via validates_as_video() """
@@ -19,17 +19,20 @@ def convert_uploaded_video(video_id):
 
 	if validates_as_video(src_path): # VALIDATE FILE UPLOAD AS VIDEO BEFORE PASSING INTO ANY SHELL CALLS
 
-		video.length = get_video_length(src_path) # Get video length
+		video.length = get_video_length(src_path)
 
 		generate_video_thumbs(src_path, video) # Generate video thumbnails from source video (higher quality)
-		video.src_vidtype = str(get_video_type(src_path)) # Get src video codec
+		video.src_codec = str(get_video_type(src_path)) # Get src video codec
 
 		# Convert file to .flv using ffmpeg ( very generic for now, should support diff. settings )
 		ffmpeg_call = "ffmpeg -i "+ src_path +" -ar 22050 -ab 96k -r 24 -b 600k -f flv " + dest_path
 		os.system(ffmpeg_call)
 
+		# Inject metadata
+		inject_metadata(dest_path)
+
 		# Get and commit additional data of processed video to db #
-		video.vidtype         = str(get_video_type(dest_path))
+		video.codec           = str(get_video_type(dest_path))
 		video.converted_file  = dest_path
 		video.converted       = True
 
@@ -101,3 +104,7 @@ def validates_as_video(path):
 		return True
 	else:
 		return False
+
+""" Inject metadata into flash video with flvtool2 """
+def inject_metadata(path):
+	os.system("flvtool2 -UPp %s" % (path,))
