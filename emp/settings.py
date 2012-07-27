@@ -59,7 +59,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'collected_static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -70,6 +70,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    os.path.join(os.path.dirname(__file__), 'static'),
 )
 
 # List of finder classes that know how to find static files in
@@ -129,7 +130,8 @@ INSTALLED_APPS = (
     'djcelery',
     'djkombu',
     'registration',
-    'djangoratings',
+    #'djangoratings',
+    'voting',
 
 )
 

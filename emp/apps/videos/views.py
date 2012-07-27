@@ -25,15 +25,13 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 
 	video_tags = video.tags.all() # get video's defined tags
 	user = request.user
+	user_favorited = False
 	if user.is_authenticated(): # if a user is logged in
 		user_profile = request.user.profile
 		if user_profile.video_favorites.filter(title=video.title): # if user has already favorited this video
 			user_favorited = True
-		else:
-			user_favorited = False
+		# check if user has cast a vote on current video
 		user_playlists = VideoPlaylist.objects.filter(owner=user) # get user's playlists
-	else:
-		user_favorited = False
 
 	create_video_playlist_form = VideoPlaylistForm()
 	csrfContext = RequestContext(request) # necessary to make Django's CSRF protection middleware happy

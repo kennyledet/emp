@@ -7,35 +7,40 @@
 <div class="row-fluid">
   <div class="span12"><h1>{{ video.title }}</h1><hr/></div>
   <div class="span6">     
-	  {% if video.converted %} {# If video is converted #}
-		  <!-- PLAYER -->
- <div id='player'>This div will be replaced by the JW Player.</div>
+	    {% if video.converted %} {# If video is converted #}
+	    <!-- PLAYER -->
+        <div id='player'>This div will be replaced by JW Player.</div>
 
- <script type='text/javascript' src='https://s3.amazonaws.com/elementalmp/jwplayer/jwplayer.js'></script>
+        <script type='text/javascript' src='https://s3.amazonaws.com/elementalmp/jwplayer/jwplayer.js'></script>
+        <script type='text/javascript'>
+            jwplayer('player').setup({
+                    'flashplayer': 'https://s3.amazonaws.com/elementalmp/jwplayer/player.swf',
+                    'width': '400',
+                    'height': '300',
+                    'file': '/media/videos/flv/{{ video.id }}.flv',
+                    'provider': 'http'
 
-  <script type='text/javascript'>
-        jwplayer('player').setup({
-                'flashplayer': 'https://s3.amazonaws.com/elementalmp/jwplayer/player.swf',
-                'width': '400',
-                'height': '300',
-                'file': '/media/videos/flv/{{ video.id }}.flv',
-                'provider': 'http'
+            });
+        </script><!-- /PLAYER -->
 
-        });
-  </script>
+		{% if request.user.is_authenticated %} {# If user is logged in #}
+        <!-- Django-voting like/dislike area -->
+        <div id="votingArea">
+            <button class="btn vote-btn like-btn" value="up"><i class="icon-thumbs-up"></i> Like</button>
+            <button class="btn vote-btn dislike-btn" value="down">Dislike</button>
+        </div>
 
-<!-- /PLAYER -->
-		  {% if request.user.is_authenticated %} {# If user is logged in #}
+        <div class="clear"></div>
         <!-- AJAXified video favoriting/unfavoriting form -->
-			  <form id="favoriteForm" action="/videos/favorite/" method="post">
-				  {% csrf_token %}
-				  <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
-          {% if user_favorited %}
-				    <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
-          {% else %}
-            <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
-          {% endif %}
-			  </form><!-- /AJAX video favoriting/unfavoriting form -->
+		<form id="favoriteForm" action="/videos/favorite/" method="post">
+		    {% csrf_token %}
+		    <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
+            {% if user_favorited %}
+		        <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
+            {% else %}
+                <input class="btn-primary" id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
+            {% endif %}
+		</form><!-- /AJAX video favoriting/unfavoriting form -->
 
         <!-- AJAXified add/remove to playlist form -->
         <form id="playlistForm" action="/videos/playlist/add/" method="post">
@@ -216,7 +221,9 @@ $(document).ready(function() {
     });
     return false;
 });
-
 </script>
+
+<script type="text/javascript" src="/static/videos/js/videoVoting.js"></script>
+
 <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 {% endblock %}

@@ -5,6 +5,7 @@
 
 <div class="container">
 
+<p>{{ STATIC_URL }}</p>
 	{% if query != '' %}
     <div class="alert alert-success">
 	    <p><b>Found {{ videos|length }} video{{ videos|pluralize }} for:</b> {{ query }}</p>
@@ -30,27 +31,9 @@
 
 
 {% block extra_javascript %}
-{# jquery cycle - video thumbnail cycling #}
-  <script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
-  <script type="text/javascript">
-  $(".slideshow").each(function() {
-      $(this).find(".slides").cycle({
-          fx:     'fade',
-          speed:   .3,
-          timeout: 280,
-          next:   '#next',
-          prev:   '#prev'
-      }).cycle("pause").end().hover(
-          function() { $(this).find('.slides').cycle('resume'); },
-          function() { $(this).find('.slides').cycle('pause'); }
-      );
-  });
-  </script>
-{# enable relative video link (on click) to video thumbnail slideshow #}
-  <script type="text/javascript">
-     jQuery('.slides img').click(function (){
-        document.location.href = jQuery(this).attr('rel');
-      }).css('cursor', 'pointer');
 
-  </script>
+{# jquery cycle - video thumbnail cycling #}
+<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
+<script type="text/javascript" src="/static/videos/js/videoThumbsCycle.js"></script>
+
 {% endblock %}
