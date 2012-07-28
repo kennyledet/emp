@@ -31,7 +31,6 @@ class Video(models.Model):
 
 	categories  = models.ManyToManyField(VideoCategory)
 	tags 		= TaggableManager(blank=True)  # django-taggit handles tagging
-	# rating 		= RatingField(range=5)   # 5 possible rating choices
 	nsfw		= models.BooleanField()  # (Not Safe for Work)
 			
 	codec		= models.CharField(max_length=255, editable=False)

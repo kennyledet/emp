@@ -1,0 +1,16 @@
+/* Video Play Page */
+.video-title {
+	color: rgb(51,181,229);
+}
+.video-options {
+	margin-top: 10px;
+}
+#favoriteForm {
+	margin-left: 5%;
+	display: inline;
+
+}
+#playlistForm {
+	margin-left: 5%;
+	display: inline;
+}
