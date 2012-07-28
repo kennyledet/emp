@@ -6,11 +6,16 @@
 	margin-top: 10px;
 }
 #favoriteForm {
-	margin-left: 5%;
+	margin-left: 2%;
 	display: inline;
 
 }
 #playlistForm {
-	margin-left: 5%;
+	margin-left: 2%;
 	display: inline;
+}
+
+/* Upload Form */
+.upload-form #id_description {
+	width: 50%;
 }

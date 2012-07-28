@@ -1,13 +1,8 @@
 {% extends "base.html" %}
 {% block title %}<title>Videos</title>{% endblock %}
 
-{% block extra_styles %}
-
-{% endblock %}
-
 {% block main_content %}
-
-<center><h2>Videos</h2></center><hr>
+<center><h2>Videos</h2></center>
 
 <div class="container">
 	{% for video in videos %}
@@ -25,31 +20,12 @@
 		{% endif %}
 	{% endfor %}
 </div>
-
 {% endblock %}
 
 {% block extra_javascript %}
 
 <script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
-<script type="text/javascript">
-// jquery cycle - video thumbnail cycling
-$(".slideshow").each(function() {
-	$(this).find(".slides").cycle({
-	    fx:     'fade',
-	    speed:   .3,
-	    timeout: 280,
-	    next:   '#next',
-	    prev:   '#prev'
-	}).cycle("pause").end().hover(
-	    function() { $(this).find('.slides').cycle('resume'); },
-	    function() { $(this).find('.slides').cycle('pause'); }
-	);
-});
+<script type="text/javascript" src="/static/videos/js/videoThumbsCycle.js"></script>
 
-// enable relative video link (on click) on video thumbnail slideshow
-$('.slides img').click(function (){
-	document.location.href = $(this).attr('rel');
-}).css('cursor', 'pointer');
-</script>
 
 {% endblock %}

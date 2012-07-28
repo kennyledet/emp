@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% block title %}<title>Video Upload</title>{% endblock %}
 {% block main_content %}
-<div class="row-fluid">
-	<div class="span6">
-		<form enctype="multipart/form-data" method="post" action="">
-		{% csrf_token %}
-			{{ upload_form.as_p }}
-			<input class="btn-primary" type="submit" value="Upload" />
-		</form>
-	</div>
+<div class="container">
+<div class="row-fluid upload-form">
+	<form class="well" enctype="multipart/form-data" method="post" action="">
+	{% csrf_token %}
+		{{ upload_form.as_p }}
+		<input class="btn-primary btn-large" type="submit" value="Upload" />
+	</form>
+</div>
 </div>
 {% endblock %}

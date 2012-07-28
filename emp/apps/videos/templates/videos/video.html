@@ -83,12 +83,14 @@
   </div> <!-- /player column -->
 
   <div class="span4"><!-- Video information column -->
-    <p>Uploaded by <a href="/profiles/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</p>
-    <p>Views: {{ video.views }}</p>
-    <p>Favorites: {{ video.num_favorites }}</p>
-    <p>Length: {{ video.length.1 }} minutes, {{ video.length_list.2 }} seconds</p>
-    <p>Description: {{ video.description }}</p>
-    <p>Tags: {% for tag in video_tags %} <a href="/tag/{{ tag.id }}">{{ tag.name }}</a>, {% endfor %}
+    <dl>
+        <dt>Uploaded by</dt><dd><a href="/profiles/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</dd>
+        <dt>Views</dt><dd>{{ video.views }}</dd>
+        <dt>Favorites</dt><dd>{{ video.num_favorites }}</dd>
+        <dt>Length</dt><dd>{{ video.length.1 }} minutes, {{ video.length_list.2 }} seconds</dd>
+        <dt>Description</dt><dd>{{ video.description }}</dd>
+        <dt>Tags</dt><dd>{% for tag in video_tags %} <a href="/tag/{{ tag.id }}">{{ tag.name }}</a>, {% endfor %}</dd>
+    </dl>
   </div> <!-- /Video information column -->
 
 </div>
