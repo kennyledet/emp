@@ -2,7 +2,7 @@
 {% block title %}<title>Videos</title>{% endblock %}
 
 {% block main_content %}
-<center><h2>Videos</h2></center>
+<center><h2 class="video-title">Videos</h2></center>
 
 <div class="container">
 	{% for video in videos %}
@@ -15,7 +15,7 @@
 				      	{% endfor %}
 				    </div>
 				</div>
-				<a href="/videos/play/{{ video.id }}/"><h4>{{ video.title }}</h4></a>
+				<a href="/videos/play/{{ video.id }}/"><h4 class="video-title">{{ video.title }}</h4></a>
 			</div>
 		{% endif %}
 	{% endfor %}

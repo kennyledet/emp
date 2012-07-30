@@ -4,8 +4,6 @@
 {% block main_content %}
 
 <div class="container">
-
-<p>{{ STATIC_URL }}</p>
 	{% if query != '' %}
     <div class="alert alert-success">
 	    <p><b>Found {{ videos|length }} video{{ videos|pluralize }} for:</b> {{ query }}</p>

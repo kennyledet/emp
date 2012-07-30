@@ -1,10 +1,11 @@
 $(document).ready(function() {
+    $('#createPlaylistForm').hide();
     // when the add to playlist form is submitted
     $("#playlistForm").submit(function(event){
         event.preventDefault();
         // if the user wants to create a new playlist
         if ( $('#playlist_id').val() == 'new_playlist' ) {
-            $('#createPlaylistModal').modal('show'); // show the modal for new playlist creation
+            $('#createPlaylistForm').show();
         } else { // otherwise, go through the add to playlist AJAX process
             $.ajax({
                 type:"POST",
@@ -32,11 +33,11 @@ $(document).ready(function() {
             type:"POST",
             url:"/videos/playlist/create/",
             data: {
-                'title': $('#createPlaylistForm #id_title').val(),
+                'title': $('#createPlaylistForm #title').val(),
             },
             success: function(data){ // upon success
                 if(data) {
-                    $('#createPlaylistModal').modal('hide'); // hide the modal form
+                    $('#createPlaylistForm').hide();
                     $('#playlist_id').append(data); // append newly created playlist to list of options, selected
                 }
             }

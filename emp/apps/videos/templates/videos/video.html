@@ -9,7 +9,7 @@
         <h1 class="video-title">{{ video.title }}</h1>
 	    {% if video.converted %} {# If video is converted #}
     	    <!-- PLAYER -->
-            <div id='player'>This div will be replaced by JW Player.</div>
+            <div id='player'></div>
 
             <script type='text/javascript' src='https://s3.amazonaws.com/elementalmp/jwplayer/jwplayer.js'></script>
             <script type='text/javascript'>
@@ -24,51 +24,72 @@
             </script><!-- /PLAYER -->
 
     		{% if request.user.is_authenticated %} {# If user is logged in #}
-                <div class="video-options well" class="span12">
-                    <!-- Django-voting like/dislike buttons -->
-                    <button class="btn btn-success vote-btn like-btn" value="up"><i class="icon-thumbs-up"></i>Like</button>
-                    <button class="btn btn-danger vote-btn dislike-btn" value="down"><i class="icon-thumbs-down"></i></button><!-- Django-voting like/dislike -->
+          <div class="video-options well" class="span12">
+            <ul class="nav nav-tabs">
+              <li><a href="#videoOptionsArea" data-toggle="tab">Video Options</a></li>
+              <li><a href="#playlistFormArea" data-toggle="tab">Add to Playlist</a></li>
+            </ul>
 
-                    <!-- AJAXified video favoriting/unfavoriting form -->
-            		<form id="favoriteForm" class="form-inline"  action="/videos/favorite/" method="post">
-            		    {% csrf_token %}
-            		    <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
-                        {% if user_favorited %}
-            		        <input class="btn-primary btn-small" id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
-                        {% else %}
-                            <input class="btn-primary btn-small" id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
-                        {% endif %}
-            		</form><!-- /AJAX video favoriting/unfavoriting form -->
-                    <!-- AJAXified add/remove to playlist form -->
-                    <form id="playlistForm" class="form-inline" action="/videos/playlist/add/" method="post">
-                      <input id="video_id" type="hidden" value="{{ video.id }}"/>
-                      <select  class="input-medium" id="playlist_id">
-                            <option value="new_playlist">New Playlist</option>
-                            {% for playlist in user_playlists %}
-                                <option value="{{ playlist.id }}">{{ playlist.title }}</option>
-                            {% endfor %}
-                        </select>
-                      <input class="btn-primary btn-small" id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
-                    </form> <!-- /AJAXified add/remove to playlist form -->
-                </div>
+            <div class="tab-content">
 
-                <!-- (Hidden) New video playlist modal popover - contains AJAXified form -->
-                <div class="modal hide" id="createPlaylistModal">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">×</button>
-                      <h3>Create a new video playlist</h3>
-                  </div>
-                  <div class="modal-body">
-                    <form id="createPlaylistForm" action="/videos/playlist/create/" method="POST">
-                      {% csrf_token %}
-                      {{ create_video_playlist_form.as_p }}
-                      <input class="btn" type="submit" value="Create"/>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <a href="#" class="btn" data-dismiss="modal">Close</a>
-                  </div>
-                </div> <!-- /(Hidden) New video playlist modal popover -->
+            <div id="videoOptionsArea" class="tab-pane active">
+              <!-- Django-voting like/dislike buttons -->
+              <button class="btn btn-success vote-btn like-btn" value="up"><i class="icon-thumbs-up"></i>Like</button>
+              <button class="btn btn-danger vote-btn dislike-btn" value="down"><i class="icon-thumbs-down"></i></button>
+              <!-- Django-voting like/dislike -->
+              <!-- AJAXified video favoriting/unfavoriting form -->
+          		<form id="favoriteForm" class="form-inline"  action="/videos/favorite/" method="post">
+          		    {% csrf_token %}
+          		    <input id="video_id" name="video_id" type="hidden" value="{{ video.id }}"/>
+                  {% if user_favorited %}
+          		      <input class="btn-primary btn-small" id="favoriteButton" name="favoriteButton" type="submit" value="Remove from Favorites"/>
+                  {% else %}
+                      <input class="btn-primary btn-small" id="favoriteButton" name="favoriteButton" type="submit" value="Add to Favorites"/>
+                  {% endif %}
+          		</form><!-- /AJAX video favoriting/unfavoriting form -->
+            </div>
+
+            <div id="playlistFormArea" class="tab-pane">
+              <!-- AJAXified add/remove to playlist form -->
+              <form id="playlistForm" class="form-inline" action="/videos/playlist/add/" method="POST">
+                {% csrf_token %}
+                <input id="video_id" type="hidden" value="{{ video.id }}"/>
+                <select  class="input-medium" id="playlist_id">
+                  <option value="new_playlist">New Playlist</option>
+                  {% for playlist in user_playlists %}
+                    <option value="{{ playlist.id }}">{{ playlist.title }}</option>
+                  {% endfor %}
+                  </select>
+                <input class="btn-primary btn-small" id="playlistButton" name="playlistButton" type="submit" value="Add to Playlist"/>
+              </form> <!-- /AJAXified add/remove to playlist form -->
+
+              <form id="createPlaylistForm" class="form-inline" action="/videos/playlist/create/" method="POST">
+                {% csrf_token %}
+                <input type="text" id="title" name="title" class="input-medium"/>
+                <input class="btn btn-primary btn-small" type="submit" value="Create"/>
+              </form>
+
+            </div>
+          </div>
+          </div>
+
+          <!-- (Hidden) New video playlist modal popover - contains AJAXified form -->
+          <div class="modal hide" id="createPlaylistModal">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">×</button>
+              <h3>Create a new video playlist</h3>
+            </div>
+            <div class="modal-body">
+              <form id="createPlaylistForm" action="/videos/playlist/create/" method="POST">
+                {% csrf_token %}
+                {{ create_video_playlist_form.as_p }}
+                <input class="btn" type="submit" value="Create"/>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">Close</a>
+            </div>
+          </div> <!-- /(Hidden) New video playlist modal popover -->
 
             {% else %}  {# User isn't logged in #}
               <p>
@@ -109,4 +130,5 @@
 <script type="text/javascript" src="/static/videos/js/videoVoting.js"></script>
 
 <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
+<script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
 {% endblock %}

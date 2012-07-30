@@ -21,15 +21,17 @@
 			<h4>Website: <a href="{{ user_profile.website }}">{{ user_profile.website }}</a></h4>
 		</div>
 		<div class="span4">
-			<h4>Favorite Videos</h4>
-			{% for video in video_favorites %}
-			  <a href="/videos/play/{{ video.id }}/{{ video.title_slug }}"><p>{{ video.title }}</p></a>
-			{% endfor %}
+			<dl>
+				<dt>Favorite Videos</dt>
+				{% for video in video_favorites %}
+				  <dd><a href="/videos/play/{{ video.id }}/{{ video.title_slug }}">{{ video.title }}</a></dd>
+				{% endfor %}
 
-			<h4>Playlists <span><a href="/videos/playlist/create/">Create new playlist</a></span></h4>
-			{% for playlist in video_playlists %}
-			  <a href="/videos/playlist/{{ playlist.id }}/{{ playlist.title_slug }}"><p>{{ playlist.title }}</p></a>
-			{% endfor %}
+				<dt>Playlists <span><a href="/videos/playlist/create/">Create new playlist</a></span></dt>
+				{% for playlist in video_playlists %}
+				  <dd><a href="/videos/playlist/{{ playlist.id }}/{{ playlist.title_slug }}">{{ playlist.title }}</a></dd>
+				{% endfor %}
+			</dl>
 		</div>
 	</div>
 {% endblock %}
