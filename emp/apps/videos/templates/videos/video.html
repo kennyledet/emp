@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load voting_tags %} 
 
 {% block title %}<title>{{ video.title }}</title>{% endblock %}
 
@@ -8,20 +9,19 @@
     <div class="span6">     
         <h1 class="video-title">{{ video.title }}</h1>
 	    {% if video.converted %} {# If video is converted #}
-    	    <!-- PLAYER -->
-            <div id='player'></div>
+    	  <!-- PLAYER -->
+        <div id='player'></div>
+          <script type='text/javascript' src='https://s3.amazonaws.com/elementalmp/jwplayer/jwplayer.js'></script>
+          <script type='text/javascript'>
+              jwplayer('player').setup({
+                      'flashplayer': 'https://s3.amazonaws.com/elementalmp/jwplayer/player.swf',
+                      'width': '400',
+                      'height': '300',
+                      'file': '/media/videos/flv/{{ video.id }}.flv',
+                      'provider': 'http'
 
-            <script type='text/javascript' src='https://s3.amazonaws.com/elementalmp/jwplayer/jwplayer.js'></script>
-            <script type='text/javascript'>
-                jwplayer('player').setup({
-                        'flashplayer': 'https://s3.amazonaws.com/elementalmp/jwplayer/player.swf',
-                        'width': '400',
-                        'height': '300',
-                        'file': '/media/videos/flv/{{ video.id }}.flv',
-                        'provider': 'http'
-
-                });
-            </script><!-- /PLAYER -->
+              });
+          </script><!-- /PLAYER -->
 
     		{% if request.user.is_authenticated %} {# If user is logged in #}
           <div class="video-options well" class="span12">
@@ -36,6 +36,11 @@
               <!-- Django-voting like/dislike buttons -->
               <button class="btn btn-success vote-btn like-btn" value="up"><i class="icon-thumbs-up"></i>Like</button>
               <button class="btn btn-danger vote-btn dislike-btn" value="down"><i class="icon-thumbs-down"></i></button>
+              {% score_for_object video as score %}
+              {{ score.score }} point{{ score.score|pluralize }} after {{ score.num_votes }} vote{{ score.num_votes|pluralize }}
+
+
+
               <!-- Django-voting like/dislike -->
               <!-- AJAXified video favoriting/unfavoriting form -->
           		<form id="favoriteForm" class="form-inline"  action="/videos/favorite/" method="post">
@@ -71,37 +76,19 @@
 
             </div>
           </div>
-          </div>
+          </div><!-- end tabbed video options area -->
 
-          <!-- (Hidden) New video playlist modal popover - contains AJAXified form -->
-          <div class="modal hide" id="createPlaylistModal">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal">×</button>
-              <h3>Create a new video playlist</h3>
-            </div>
-            <div class="modal-body">
-              <form id="createPlaylistForm" action="/videos/playlist/create/" method="POST">
-                {% csrf_token %}
-                {{ create_video_playlist_form.as_p }}
-                <input class="btn" type="submit" value="Create"/>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <a href="#" class="btn" data-dismiss="modal">Close</a>
-            </div>
-          </div> <!-- /(Hidden) New video playlist modal popover -->
-
-            {% else %}  {# User isn't logged in #}
-              <p>
-                <a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!
-              </p>
-            {% endif %}
+        {% else %}  {# User isn't logged in #}
+          <p>
+            <a href="/accounts/login/">Login</a> or <a href="/accounts/register">Register</a> to favorite this video!
+          </p>
+        {% endif %}
 
 	  {% else %} {# Video isn't converted yet #}
 		  <h3>Video is still converting</h3>
 		  <p>{{ video.title }} is still converting, please refresh later</p>
 	  {% endif %}
-  </div> <!-- /player column -->
+  </div> <!-- end player column -->
 
   <div class="span4"><!-- Video information column -->
     <dl>
@@ -112,7 +99,7 @@
         <dt>Description</dt><dd>{{ video.description }}</dd>
         <dt>Tags</dt><dd>{% for tag in video_tags %} <a href="/tag/{{ tag.id }}">{{ tag.name }}</a>, {% endfor %}</dd>
     </dl>
-  </div> <!-- /Video information column -->
+  </div> <!-- end video information column -->
 
 </div>
 </div>
