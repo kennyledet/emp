@@ -1,4 +1,3 @@
-import os.path
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -124,7 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     # 1st party
     'emp.apps.videos',
-    'emp.apps.profiles',
+    'emp.apps.channels',
     # 3rd party
     'taggit',
     'djcelery',
@@ -184,8 +183,8 @@ BROKER_VHOST = "/"
 # django-registration account activation window
 ACCOUNT_ACTIVATION_DAYS = 60
 
-# tell Django where UserProfile lives for 'user.get_profile()'
-AUTH_PROFILE_MODULE = "emp.apps.profiles.UserProfile"
+# tell Django where UserChannel lives for 'user.get_profile()'
+AUTH_PROFILE_MODULE = "emp.apps.channels.UserChannel"
 
 
 # Uncomment the following lines for Heroku deployment

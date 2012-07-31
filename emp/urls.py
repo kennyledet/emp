@@ -10,8 +10,7 @@ urlpatterns = patterns('',
 
     # videos app
     url(r'^videos/', include('emp.apps.videos.urls')),
-    # accounts app - holds UserProfile model and user profile views
-    url(r'^profiles/', include('emp.apps.profiles.urls')),
+    url(r'^channels/', include('emp.apps.channels.urls')),
 
     # django admin
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 """ Import Models """
 from emp.apps.videos.models 			import Video, VideoPlaylist
-from emp.apps.profiles.models 		import UserProfile
+from emp.apps.channels.models 		import UserChannel
 from django.contrib.auth.models 	import User
 
 """ Import forms """
@@ -27,8 +27,8 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 	user = request.user
 	user_favorited = False
 	if user.is_authenticated(): # if a user is logged in
-		user_profile = request.user.profile
-		if user_profile.video_favorites.filter(title=video.title): # if user has already favorited this video
+		user_channel = request.user.channel
+		if user_channel.video_favorites.filter(title=video.title): # if user has already favorited this video
 			user_favorited = True
 		# check if user has cast a vote on current video
 		user_playlists = VideoPlaylist.objects.filter(owner=user) # get user's playlists
@@ -109,14 +109,14 @@ def favorite_video(request):
 		# fav_type - Either 'Add to Favorites' or 'Remove from Favorites', self explanatory
 		if request.POST['video_id'] and request.POST['fav_type']:
 			video = Video.objects.get(id=request.POST['video_id'])
-			user_profile = request.user.profile
+			user_channel = request.user.channel
 			
-			# Video either gets added or removed from the UserProfile's video_favorites ManyToMany field
+			# Video either gets added or removed from the UserChannel's video_favorites ManyToMany field
 			if request.POST['fav_type'] == 'Add to Favorites':
-				user_profile.video_favorites.add(video)
+				user_channel.video_favorites.add(video)
 				return HttpResponse('Added') # let AJAX caller know the video was added to favorites
 			elif request.POST['fav_type'] == 'Remove from Favorites':
-				user_profile.video_favorites.remove(video)
+				user_channel.video_favorites.remove(video)
 				return HttpResponse('Removed') # let AJAX caller know the video was removed from favorites
 	else:
 		return HttpResponse('Not Ajax')
@@ -153,7 +153,7 @@ def create_video_playlist(request):
 				new_video_playlist = create_video_playlist_form.save(commit=False)
 				new_video_playlist.owner = request.user # set the current user as the owner
 				new_video_playlist.save()
-				return HttpResponseRedirect('/profiles/'+str(request.user)+'/') # redirect user to their profile
+				return HttpResponseRedirect('/channels/'+str(request.user)+'/') # redirect user to their channel
 		else: # display the form
 			create_video_playlist_form = VideoPlaylistForm()
 			csrfContext = RequestContext(request)

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ username }}'s channel</title>
+{% endblock %}
+
+{% block main_content %}
+
+	{% if user_owns_channel %}
+	  <h6>Hello, {{ username }}. This is your channel :).</h6>
+	{% else %}
+	  <h6>Welcome to {{ user_channel.user }}'s channel.</h6>
+	{% endif %}
+	<hr>
+	<div class="row-fluid">
+		<div class="span4">
+			<img src="/media/{{ user_channel.profile_pic }}">
+		</div>
+		<div class="span4">
+			<h3>Username: {{ user_channel.user }}</h3>
+			<h4>Website: <a href="{{ user_channel.website }}">{{ user_channel.website }}</a></h4>
+		</div>
+		<div class="span4">
+			<dl>
+				<dt>Favorite Videos</dt>
+				{% for video in video_favorites %}
+				  <dd><a href="/videos/play/{{ video.id }}/{{ video.title_slug }}">{{ video.title }}</a></dd>
+				{% endfor %}
+
+				<dt>Playlists <span><a href="/videos/playlist/create/">Create new playlist</a></span></dt>
+				{% for playlist in video_playlists %}
+				  <dd><a href="/videos/playlist/{{ playlist.id }}/{{ playlist.title_slug }}">{{ playlist.title }}</a></dd>
+				{% endfor %}
+			</dl>
+		</div>
+	</div>
+{% endblock %}

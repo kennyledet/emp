@@ -54,9 +54,9 @@ class Video(models.Model):
 
 	thumbs_list = property(_get_thumbs)
 
-	""" Get number of favorites (via the # of user profiles which have the video favorited (m2m relation)) """
+	""" Get number of favorites (via the # of user channels which have the video favorited (m2m relation)) """
 	def _get_num_favorites(self):
-		favoriters = self.userprofile_set.all()
+		favoriters = self.userchannel_set.all()
 		return len(favoriters)
 
 	num_favorites = property(_get_num_favorites)

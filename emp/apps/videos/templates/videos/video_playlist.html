@@ -6,7 +6,7 @@
 <div class="container">
 	<div class="span12"><h3>Video Playlist - {{ playlist.title }}</h3><hr/></div>
 	<div class="span3" style="height:500px;"> <!-- left column - playlist information -->
-	 	<h4>Created by: <a href="/profiles/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
+	 	<h4>Created by: <a href="/channels/{{ playlist.owner }}/">{{ playlist.owner }}</a></h4>
 	 	{% ifequal playlist.owner request.user %}
 	 		<p>This is your playlist</p><br/>
 	 	{% else %} {# allow users to import other users' playlists #}
