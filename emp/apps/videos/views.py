@@ -34,6 +34,9 @@ def video(request, video_id, video_title_slug=None): # Catch the video id in the
 		user_playlists = VideoPlaylist.objects.filter(owner=user) # get user's playlists
 
 	create_video_playlist_form = VideoPlaylistForm()
+
+	uploader_videos = Video.objects.filter(uploader=video.uploader)[:5]
+
 	csrfContext = RequestContext(request) # necessary to make Django's CSRF protection middleware happy
 	return render_to_response('videos/video.html', locals(), csrfContext)
 

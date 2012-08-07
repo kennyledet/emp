@@ -7,7 +7,7 @@
 <div class="container">
 <div class="row-fluid">
     <div class="span6">     
-        <h1 class="video-title">{{ video.title }}</h1>
+      <h1 class="video-title">{{ video.title }}</h1>
 	    {% if video.converted %} {# If video is converted #}
     	  <!-- PLAYER -->
         <div id='player'></div>
@@ -90,15 +90,39 @@
 	  {% endif %}
   </div> <!-- end player column -->
 
-  <div class="span4"><!-- Video information column -->
-    <dl>
-        <dt>Uploaded by</dt><dd><a href="/channels/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</dd>
-        <dt>Views</dt><dd>{{ video.views }}</dd>
-        <dt>Favorites</dt><dd>{{ video.num_favorites }}</dd>
-        <dt>Length</dt><dd>{{ video.length.1 }} minutes, {{ video.length_list.2 }} seconds</dd>
-        <dt>Description</dt><dd>{{ video.description }}</dd>
-        <dt>Tags</dt><dd>{% for tag in video_tags %} <a href="/tag/{{ tag.id }}">{{ tag.name }}</a>, {% endfor %}</dd>
-    </dl>
+  <div class="span4"> <!-- video information column -->
+    <ul class="nav nav-tabs">
+      <li><a href="#generalVideoInfo" data-toggle="tab">Video Info</a></li>
+      <li><a href="#uploaderVideos" data-toggle="tab">More by {{ video.uploader }}</a></li>
+    </ul>
+    <div class="tab-content"> <!-- tabbed content -->
+      <div id="generalVideoInfo" class="tab-pane active">
+        <dl>
+            <dt>Uploaded by</dt><dd><a href="/channels/{{ video.uploader }}">{{ video.uploader }}</a> on {{ video.upload_datetime }}</dd>
+            <dt>Views</dt><dd>{{ video.views }}</dd>
+            <dt>Favorites</dt><dd>{{ video.num_favorites }}</dd>
+            <dt>Length</dt><dd>{{ video.length.1 }} minutes, {{ video.length_list.2 }} seconds</dd>
+            <dt>Description</dt><dd>{{ video.description }}</dd>
+            <dt>Tags</dt><dd>{% for tag in video_tags %} <a href="/tag/{{ tag.id }}">{{ tag.name }}</a>, {% endfor %}</dd>
+        </dl>
+      </div>
+      <div id="uploaderVideos" class="tab-pane">
+        {% for video in uploader_videos %}
+          {% if video.converted %}
+            <div>
+              <div class="slideshow" width="125">
+                  <div class="slides pics" style="position: relative; ">   
+                    {% for thumb in video.thumbs_list %}                
+                        <img src="/media/videos/thumbs/{{ video.id }}/{{ thumb }}" rel="/videos/play/{{ video.id }}/{{ video.title_slug }}" width="125" height="125" style="position: absolute; top: 0px; left: 0px; width: 125px; height: 125px; z-index: 8; opacity: 0; display: none; ">
+                      {% endfor %}
+                  </div>
+              </div>
+              <a href="/videos/play/{{ video.id }}/"><h4 class="video-title">{{ video.title }}</h4></a>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div><!-- end tabbed content -->
   </div> <!-- end video information column -->
 
 </div>
@@ -116,6 +140,11 @@
 
 <script type="text/javascript" src="/static/videos/js/videoVoting.js"></script>
 
+<script type="text/javascript" src="http://malsup.github.com/jquery.cycle.all.js"></script>
+
+<script type="text/javascript" src="/static/videos/js/videoThumbsCycle.js"></script>
+
 <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-modal.js"></script>
 <script type="text/javascript" src="http://twitter.github.com/bootstrap/assets/js/bootstrap-tab.js"></script>
+
 {% endblock %}
